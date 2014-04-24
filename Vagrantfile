@@ -78,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the file default.pp in the manifests_path directory.
   #
   config.vm.provision "puppet" do |puppet|
-    puppet.options = '--verbose --debug'
+#    puppet.options = '--verbose --debug'
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "site.pp"
     puppet.module_path = "modules"
