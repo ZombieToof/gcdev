@@ -7,7 +7,6 @@ $phpbb_release_filename = "${phpbb_release}.tar.bz2"
 $phpbb_url = "${phpbb_url_dir}/${phpbb_release_filename}"
 $home_dir = "/home/vagrant"
 
-
 # LAMP stack
 package {['apache2',
           'php5',
@@ -22,6 +21,11 @@ service {'apache2':
   enable  => true,
   require => Package['apache2']
 }
+
+
+#
+# Download and install phpbb
+#
 
 exec {
   "Retrieve ${phpbb_url}":
@@ -73,5 +77,31 @@ mysql::db {'phpbb':
   host => 'localhost',
   grant => ['ALL'],
   sql => '/vagrant/files/phpbb_initial_data.sql'
-  }
+}
   
+
+#
+# Install a Django and the django ABC into a vitual env
+#
+
+class { 'python':
+  version    => 'system',
+  dev        => true,
+  virtualenv => true,
+  gunicorn   => true,
+}
+
+python::virtualenv { '/home/vagrant/gcdjango':
+  ensure       => present,
+  version      => '3',
+  owner        => 'vagrant',
+  group        => 'vagrant',
+  timeout      => 0,
+}
+
+python::pip { 'Django':
+  pkgname       => 'https://www.djangoproject.com/download/1.7b2/tarball',
+  virtualenv    => '/home/vagrant/gcdjango',
+  owner         => 'vagrant',
+  require       => Python::Virtualenv['/home/vagrant/gcdjango']
+}
