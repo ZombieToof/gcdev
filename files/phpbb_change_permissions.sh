@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOTDIR=/var/www/html
+ROOTDIR=/var/www/html/forum
 
 cd $ROOTDIR
 

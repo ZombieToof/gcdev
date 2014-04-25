@@ -43,32 +43,55 @@ exec {
     require => Exec["Retrieve ${phpbb_url}"],
 }
 
-
 exec {
-  "Copy ${phpbb_release_filename} to /var/www":
+  "Copy ${phpbb_release_filename} to /var/www/html/forum":
     cwd     => "$home_dir",
-    command => "/bin/rm -rf /var/www/html/* && cp -R ${home_dir}/${phpbb_release}/* /var/www/html",
-    creates  => "/var/www/html/config.php",
+    command => "/bin/rm -rf /var/www/html/* && cp -R ${home_dir}/${phpbb_release} /var/www/html/forum",
+    creates  => "/var/www/html/forum/config.php",
     require => Exec["Extract ${phpbb_release_filename}"],
 }
 
-file {'/var/www/html/config.php':
-  ensure => 'present',
-  source => '/vagrant/files/phpbb_config.php',
-  mode => '0777',
-  require => Exec["Copy ${phpbb_release_filename} to /var/www"]
+
+#
+# Copy the content of the GCWeb repository over the installed forum
+#
+
+exec {
+  "Copy GCWeb to /var/www/html/forum":
+    cwd     => "$home_dir",
+    command => "/bin/cp -R /vagrant/files/GCWeb/* /var/www/html/",
+    creates  => "/var/www/html/library/includes/config.php",
+    require => Exec["Copy ${phpbb_release_filename} to /var/www/html/forum"]
 }
 
-file {'/home/vagrant/phpbb_change_permissions.sh':
-  ensure => 'present',
-  source => '/vagrant/files/phpbb_change_permissions.sh',
-  mode => '0766'
+
+#
+# Confure/"finish" the phpBB/ABC installation
+#
+
+file {'/var/www/html/forum/config.php':
+   ensure => 'present',
+   source => '/vagrant/files/phpbb_config.php',
+   mode => '0777',
+   require => Exec["Copy GCWeb to /var/www/html/forum"]
+}
+
+file {'/var/www/html/library/includes/config.php':
+   ensure => 'present',
+   source => '/vagrant/files/library_includes_config.php',
+   mode => '0777',
+   require => Exec["Copy GCWeb to /var/www/html/forum"]
 }
 
 exec {'Change phpbb ${phpbb_release} permissions':
-  command => "/home/vagrant/phpbb_change_permissions.sh",
-  require => File["/var/www/html/config.php"],
+  command => "/vagrant/files/phpbb_change_permissions.sh",
+  require => File["/var/www/html/forum/config.php"],
   notify => Service["apache2"]
+}
+
+file {'/var/www/html/forum/install':
+  ensure => 'absent',
+  force => 'true'
 }
 
 mysql::db {'phpbb':
