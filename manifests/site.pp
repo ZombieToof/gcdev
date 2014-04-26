@@ -128,3 +128,31 @@ python::pip { 'Django':
   owner         => 'vagrant',
   require       => Python::Virtualenv['/home/vagrant/gcdjango']
 }
+
+package {['python3-dev',
+          'tcl-dev',
+          'tk-dev',
+          'libtiff4-dev',
+          'libjpeg62-dev',
+          'zlib1g-dev',
+          'libfreetype6-dev',
+          'liblcms2-dev',
+          'python3-tk']:
+  ensure => 'latest'
+  }
+
+python::pip { 'Pillow':
+  pkgname       => 'Pillow',
+  virtualenv    => '/home/vagrant/gcdjango',
+  owner         => 'vagrant',
+  require       => [Python::Virtualenv['/home/vagrant/gcdjango'],
+                    Package['python3-dev'],
+                    Package['tcl-dev'],
+                    Package['tk-dev'],
+                    Package['libtiff4-dev'],
+                    Package['libjpeg62-dev'],
+                    Package['zlib1g-dev'],
+                    Package['libfreetype6-dev'],
+                    Package['liblcms2-dev'],
+                    Package['python3-tk']]
+}
