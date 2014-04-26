@@ -1,0 +1,3 @@
+[submodule "projects/gcabc"]
+	path = projects/gcabc
+	url = git@github.com:ZombieToof/gcabc.git
