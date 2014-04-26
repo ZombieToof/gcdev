@@ -20,7 +20,7 @@ Installation
 1. Install VirtualBox
 2. Install Vagrant
 3. Copy Flummi's GCWeb repository to files/GCWeb
-3. Run `vagrant up`
+4. Run `vagrant up`
 
 `vagrant up` will basicall do the following things:
 
@@ -69,3 +69,29 @@ Usernames/Passwords
 Note that the passwords are hard coded in the VM,
 the Vagrant config (manifests/site.pp / files/*.config.php) 
 and the imported data.
+
+
+Available Web services / local paths
+====================================
+
+* Customized phpBB (with GCWeb)
+  http://localhost:80 (guest), forwarded to
+  http://localhost:10080 (host)
+  guest path: /var/www/html
+  served by apache, started: automatically
+  configured by vagrant/puppet
+
+* gcabc (Prototype to implement ABC in django)
+  http://localhost:8000 (guest), forwarded to
+  http://localhost:8000 (host)
+  http://localhost:8000/admin (django admin on both)
+
+  guest path:
+    * python environment: /home/vagrant/gcdjango
+    * django application: /vagrant/projects/gcabc
+
+  needs to be started manually with::
+
+    /home/vagrant/gcdjango/bin/python /vagrant/projects/gcabc/manage.py runserver 0.0.0.0:8000
+
+  needs to be configured manually before usable.
