@@ -123,7 +123,7 @@ python::virtualenv { '/home/vagrant/gcdjango':
 }
 
 python::pip { 'Django':
-  pkgname       => 'https://www.djangoproject.com/download/1.7b2/tarball',
+  pkgname       => 'https://www.djangoproject.com/download/1.7b1/tarball',
   virtualenv    => '/home/vagrant/gcdjango',
   owner         => 'vagrant',
   require       => Python::Virtualenv['/home/vagrant/gcdjango']
