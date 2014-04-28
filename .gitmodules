@@ -1,3 +1,6 @@
 [submodule "projects/gcabc"]
 	path = projects/gcabc
 	url = git@github.com:ZombieToof/gcabc.git
+[submodule "projects/django-phpBB3"]
+	path = projects/django-phpBB3
+	url = git@github.com:ZombieToof/django-phpBB3.git

@@ -108,7 +108,7 @@ mysql::db {'phpbb':
 #
 
 class { 'python':
-  version    => 'system',
+  version    => '2.7',
   dev        => true,
   virtualenv => true,
   gunicorn   => true,
@@ -116,7 +116,7 @@ class { 'python':
 
 python::virtualenv { '/home/vagrant/gcdjango':
   ensure       => present,
-  version      => '3',
+  version      => '2.7',
   owner        => 'vagrant',
   group        => 'vagrant',
   timeout      => 0,
@@ -129,7 +129,7 @@ python::pip { 'Django':
   require       => Python::Virtualenv['/home/vagrant/gcdjango']
 }
 
-package {['python3-dev',
+package {['python-dev',
           'tcl-dev',
           'tk-dev',
           'libtiff4-dev',
@@ -137,16 +137,16 @@ package {['python3-dev',
           'zlib1g-dev',
           'libfreetype6-dev',
           'liblcms2-dev',
-          'python3-tk']:
+          'python-tk',
+          'libmysqlclient-dev']:
   ensure => 'latest'
   }
 
-python::pip { 'Pillow':
-  pkgname       => 'Pillow',
+python::requirements { '/vagrant/projects/gcabc/abcapp/requirements.txt':
   virtualenv    => '/home/vagrant/gcdjango',
   owner         => 'vagrant',
   require       => [Python::Virtualenv['/home/vagrant/gcdjango'],
-                    Package['python3-dev'],
+                    Package['python-dev'],
                     Package['tcl-dev'],
                     Package['tk-dev'],
                     Package['libtiff4-dev'],
@@ -154,5 +154,5 @@ python::pip { 'Pillow':
                     Package['zlib1g-dev'],
                     Package['libfreetype6-dev'],
                     Package['liblcms2-dev'],
-                    Package['python3-tk']]
+                    Package['python-tk']]
 }
