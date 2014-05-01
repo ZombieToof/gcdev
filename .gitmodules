@@ -4,3 +4,6 @@
 [submodule "projects/django-phpBB3"]
 	path = projects/django-phpBB3
 	url = git@github.com:ZombieToof/django-phpBB3.git
+[submodule "projects/GCWeb"]
+	path = projects/GCWeb
+	url = git@github.com:KoffeinFlummi/GCWeb.git

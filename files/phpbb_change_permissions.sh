@@ -1,6 +1,8 @@
 #!/bin/bash
+# The files are located in a synced folder now. Changing permissions
+# isn't possible from within the VM. Moved this to Vagrantfile
 
-ROOTDIR=/var/www/html/forum
+ROOTDIR=/vagrant/projects/GCWeb/forum/
 
 cd $ROOTDIR
 

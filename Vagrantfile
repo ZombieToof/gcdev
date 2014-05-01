@@ -4,6 +4,22 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+# phpBB needs (global) write access to some files/directories,
+# but git does not manage file/directory permissions.
+# We cannot change permissions in synced folder form within the
+# virtual machine. So we abuse Vagrant to execude these commands
+# every time it is run.
+# Thanks to tmatilai - http://superuser.com/a/710739
+puts '==============================================================='
+puts 'Changing phpBB permissions from Vagrantfile. Call it a hack ...'
+system('chmod 777 ./projects/GCWeb/forum/cache')
+system('chmod 777 ./projects/GCWeb/forum/config.php')
+system('chmod 777 ./projects/GCWeb/forum/files')
+system('chmod 777 ./projects/GCWeb/forum/store')
+system('chmod 777 ./projects/GCWeb/forum/images/avatars/upload')
+puts '...done.'
+puts '==============================================================='
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,

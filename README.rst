@@ -14,13 +14,22 @@ It contains:
   * Not much else yet
 
 
+Requirements
+============
+
+1. Have VirtualBox installed
+2. Have Vagrant installed
+3. Have access to KoffeinFlummi's GCWeb repository on github so it can 
+   be checked out as a submodule. If you don't checkout this config you
+   can move a copy of the GCWeb repository to ./projects/GCWeb.
+
+
 Installation
 ============
 
-1. Install VirtualBox
-2. Install Vagrant
-3. Copy Flummi's GCWeb repository to files/GCWeb
-4. Run `vagrant up`
+Checkout this repository, change to the repository root and run::
+
+  vagrant up
 
 `vagrant up` will basicall do the following things:
 
@@ -31,8 +40,7 @@ Installation
 * Provision the VM with the Software above, especially:
   * Add a MySQL database for phpBB/ABC
   * Import the Tables/Data of a new phpBB installation
-  * Install phpBB in Apache and configure it
-  * Install GCWeb in Apache and configure it
+  * Configure Apache to serve ./projects/GCWeb
 
 
 Customizations
@@ -43,32 +51,19 @@ newly installed phpbb 3.0.12. If you want to use different data you
 can replace the file `files/phpbb_initial_data.sql` with a mysql dump
 of your choice *before* you build the box the first time. 
 
-If you want to replace the data later you can connect to the MySql,
-drop the database and let vagrant reprovision the machine after you
-replaced `files/phpbb_initial_data.sql`:
-
-  host$ cp my_fancy_new_data_dump.sql files/phpbb_initial_data.sql
-  host$ vagrant up  # if you haven't already
-  host$ vagrant ssh
-  
-  client$ mysql -u phpbb -p phpbb  # enter 'phpbb' as the password
-  > drop database phpbb;
-  > exit
-
-  # now let vagrant run the puppet provisioner again
-  host$ vagrant provision
+If you want to replace the data later you can replace the file 
+`phpbb_initial_data.sql` and run `./scripts/phpbb_reinitialize_database.sh`.
 
 
 Usernames/Passwords
 ===================
 
 * systems user/password: vagrant
-* mysql db/user/password: phpbb
+  (default of the VM image)
+* mysql db/user/password: phpbb 
+  (configure in `manifests/site.pp` and used in `files/*config.php)
 * phpbb admin user/password: admin/password
-
-Note that the passwords are hard coded in the VM,
-the Vagrant config (manifests/site.pp / files/*.config.php) 
-and the imported data.
+  (part of ` phpbb_initial_data.sql`)
 
 
 Available Web services / local paths
@@ -81,6 +76,9 @@ Available Web services / local paths
   served by apache, started: automatically
   configured by vagrant/puppet
 
+  guest path: /vagrant/projects/GCWeb
+  host path: ./projects/GCWeb
+
 * gcabc (Prototype to implement ABC in django)
   http://localhost:8000 (guest), forwarded to
   http://localhost:8000 (host)
@@ -90,8 +88,11 @@ Available Web services / local paths
     * python environment: /home/vagrant/gcdjango
     * django application: /vagrant/projects/gcabc
 
-  needs to be started manually with::
+  Needs to be started manually with::
 
-    /home/vagrant/gcdjango/bin/python /vagrant/projects/gcabc/manage.py runserver 0.0.0.0:8000
+    ./scripts/django_runserver.sh
 
-  needs to be configured manually before usable.
+  You can get a django shell with::
+    ./scripts/django_shell.sh
+
+  Needs to be configured manually before usable.

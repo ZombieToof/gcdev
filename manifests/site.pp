@@ -2,94 +2,62 @@ include '::mysql::server'
 include '::mysql::client'
 
 $phpbb_url_dir = "https://www.phpbb.com/files/release/"
-$phpbb_release = "phpBB-3.0.12"
-$phpbb_release_filename = "${phpbb_release}.tar.bz2"
-$phpbb_url = "${phpbb_url_dir}/${phpbb_release_filename}"
+$phpbb_release = "phpBB-3.0.11"
+$phpbb_release_filename = "phpBB-3.0.11.tar.bz2"
+$phpbb_url = "http://iweb.dl.sourceforge.net/project/phpbb/phpBB%203/phpBB%203.0.11/phpBB-3.0.11.tar.bz2"
 $home_dir = "/home/vagrant"
 
 # LAMP stack
-package {['apache2',
-          'php5',
+package {['php5',
           'php5-mysql',
           'php5-gd',
           'imagemagick']:
   ensure => 'latest'
   }
 
-service {'apache2':
-  ensure  => running,
-  enable  => true,
-  require => Package['apache2']
+class {'apache':
+  default_vhost => false,
+  mpm_module => 'prefork'
 }
 
+class { 'apache::mod::rewrite': }
+class { 'apache::mod::php': }
+class { 'apache::mod::proxy': }
+class { 'apache::mod::proxy_http': }
 
-#
-# Download and install phpbb
-#
 
-exec {
-  "Retrieve ${phpbb_url}":
-    cwd     => "$home_dir",
-    command => "/usr/bin/wget $phpbb_url",
-    creates => "${home_dir}/${phpbb_release_filename}",
-    timeout => 3600,
-}
-
-exec {
-  "Extract ${phpbb_release_filename}":
-    cwd     => "$home_dir",
-    command => "/bin/tar xjf ${phpbb_release_filename} && mv /home/vagrant/phpBB3 /home/vagrant/${phpbb_release}",
-    creates  => "${home_dir}/${phpbb_release}",
-    require => Exec["Retrieve ${phpbb_url}"],
-}
-
-exec {
-  "Copy ${phpbb_release_filename} to /var/www/html/forum":
-    cwd     => "$home_dir",
-    command => "/bin/rm -rf /var/www/html/* && cp -R ${home_dir}/${phpbb_release} /var/www/html/forum",
-    creates  => "/var/www/html/forum/config.php",
-    require => Exec["Extract ${phpbb_release_filename}"],
-}
+apache::vhost { 'GCWeb':
+      port          => '80',
+      docroot       => '/vagrant/projects/GCWeb',
+    }
 
 
 #
-# Copy the content of the GCWeb repository over the installed forum
+# Configure GCWeb/phpbb
 #
 
-exec {
-  "Copy GCWeb to /var/www/html/forum":
-    cwd     => "$home_dir",
-    command => "/bin/cp -R /vagrant/files/GCWeb/* /var/www/html/",
-    creates  => "/var/www/html/library/includes/config.php",
-    require => Exec["Copy ${phpbb_release_filename} to /var/www/html/forum"]
-}
-
-
-#
-# Confure/"finish" the phpBB/ABC installation
-#
-
-file {'/var/www/html/forum/config.php':
+file {'/vagrant/projects/GCWeb/forum/config.php':
    ensure => 'present',
    source => '/vagrant/files/phpbb_config.php',
-   mode => '0777',
-   require => Exec["Copy GCWeb to /var/www/html/forum"]
+   mode => '0777',  # mode does not work in synced folder
+   notify => Service["apache2"]
 }
 
-file {'/var/www/html/library/includes/config.php':
+file {'/vagrant/projects/GCWeb/library/includes/config.php':
    ensure => 'present',
    source => '/vagrant/files/library_includes_config.php',
-   mode => '0777',
-   require => Exec["Copy GCWeb to /var/www/html/forum"]
+   mode => '0777',  # mode does not work in synced folder
+   notify => Service["apache2"]
 }
 
-exec {'Change phpbb ${phpbb_release} permissions':
-  command => "/vagrant/files/phpbb_change_permissions.sh",
-  require => File["/var/www/html/forum/config.php"],
-  notify => Service["apache2"]
-}
+# The files are located in a synced folder now. Changing permissions
+# isn't possible from within the VM. Moved this to Vagrantfile
+# exec {'Change phpbb $ permissions':
+#   command => "/vagrant/files/phpbb_change_permissions.sh",
+#   require => File["/vagrant/projects/GCWeb/forum/config.php"],
+# }
 
-file {'/var/www/html/forum/install':
+file {'/vagrant/projects/GCWeb/forum/install':
   ensure => 'absent',
   force => 'true'
 }
