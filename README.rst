@@ -69,6 +69,10 @@ Usernames/Passwords
 Available Web services / local paths
 ====================================
 
+We configure an apache virtual host on the guest that serves GCWeb
+like described in it's README, and django trough a ProxyPass rule
+for the urls /djangoadmin and /abc.
+
 * Customized phpBB (with GCWeb)
   http://localhost:80 (guest), forwarded to
   http://localhost:10080 (host)
@@ -80,19 +84,28 @@ Available Web services / local paths
   host path: ./projects/GCWeb
 
 * gcabc (Prototype to implement ABC in django)
-  http://localhost:8000 (guest), forwarded to
-  http://localhost:8000 (host)
-  http://localhost:8000/admin (django admin on both)
+  http://localhost:80/abc +
+  http://localhost:80/djangoadmin (guest), forwarded to
+  http://localhost:10080/abc +
+  http://localhost:10080/djangoadmin (host)
 
   guest path:
     * python environment: /home/vagrant/gcdjango
     * django application: /vagrant/projects/gcabc
 
-  Needs to be started manually with::
+  Needs to be started manually from the host with::
 
     ./scripts/django_runserver.sh
-
+    
   You can get a django shell with::
     ./scripts/django_shell.sh
 
-  Needs to be configured manually before usable.
+  Before it is usable you have to run the migrations on the host
+  which is not done automatically.
+
+  $ vagrant ssh
+  vagrant@... $ cd /vagrant/projects/gcabc
+  vagrant@... $ /home/vagrant/gcdjango/bin/python manage.py migrate
+
+  If you don't start the django server you'll get a `bad gateway` error
+  for /abc and /djangoadmin

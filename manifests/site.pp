@@ -27,9 +27,16 @@ class { 'apache::mod::proxy_http': }
 
 
 apache::vhost { 'GCWeb':
-      port          => '80',
-      docroot       => '/vagrant/projects/GCWeb',
-    }
+  port => '80',
+  docroot => '/vagrant/projects/GCWeb',
+#  rewrites => [{ rewrite_rule => []}]
+  proxy_pass => [{path => '/djangoadmin/',
+                  url => 'http://localhost:8000/djangoadmin/'},
+                 {path => '/static/',
+                  url => 'http://localhost:8000/static/'},
+                 {path => '/abc/',
+                  url => 'http://localhost:8000/abc/'}]
+}
 
 
 #
