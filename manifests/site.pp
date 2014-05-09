@@ -113,7 +113,8 @@ package {['python-dev',
           'libfreetype6-dev',
           'liblcms2-dev',
           'python-tk',
-          'libmysqlclient-dev']:
+          'libmysqlclient-dev',
+          'graphviz-dev']:
   ensure => 'latest'
   }
 
