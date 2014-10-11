@@ -53,7 +53,7 @@ can replace the file `files/phpbb_initial_data.sql` with a mysql dump
 of your choice *before* you build the box the first time. 
 
 If you want to replace the data later you can replace the file 
-`phpbb_initial_data.sql` and run `./scripts/phpbb_reinitialize_database.sh`.
+`phpbb_initial_data.sql` and run `./bin/phpbb_reinitialize_database.sh`.
 
 
 Usernames/Passwords
@@ -96,10 +96,10 @@ for the urls /djangoadmin and /abc.
 
   Needs to be started manually from the host with::
 
-    ./scripts/django_runserver.sh
+    ./bin/django_runserver.sh
     
   You can get a django shell with::
-    ./scripts/django_shell.sh
+    ./bin/django_shell.sh
 
   Before it is usable you have to run the migrations on the host
   which is not done automatically.
