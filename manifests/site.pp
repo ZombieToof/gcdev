@@ -75,7 +75,12 @@ mysql::db {'phpbb':
   host => 'localhost',
   grant => ['ALL'],
   sql => '/vagrant/files/phpbb_initial_data.sql'
-}
+} -> mysql_grant { "phpbb@localhost/test_phpbb.*":
+    privileges => ['ALL'],
+    provider   => 'mysql',
+    user       => "phpbb@localhost",
+    table      => "test_phpbb.*",
+  }
   
 
 #
