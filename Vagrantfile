@@ -12,11 +12,11 @@ VAGRANTFILE_API_VERSION = "2"
 # Thanks to tmatilai - http://superuser.com/a/710739
 puts '==============================================================='
 puts 'Changing phpBB permissions from Vagrantfile. Call it a hack ...'
-system('chmod 777 -R ./projects/GCWeb/forum/cache')
-system('chmod 777 -R  ./projects/GCWeb/forum/config.php')
-system('chmod 777 -R  ./projects/GCWeb/forum/files')
-system('chmod 777 -R  ./projects/GCWeb/forum/store')
-system('chmod 777 -R  ./projects/GCWeb/forum/images/avatars/upload')
+system('chmod 777 -R ./src/GCWeb/forum/cache')
+system('chmod 777 -R  ./src/GCWeb/forum/config.php')
+system('chmod 777 -R  ./src/GCWeb/forum/files')
+system('chmod 777 -R  ./src/GCWeb/forum/store')
+system('chmod 777 -R  ./src/GCWeb/forum/images/avatars/upload')
 puts '...done.'
 puts '==============================================================='
 

@@ -28,7 +28,7 @@ class { 'apache::mod::proxy_http': }
 
 apache::vhost { 'GCWeb':
   port => '80',
-  docroot => '/vagrant/projects/GCWeb',
+  docroot => '/vagrant/src/GCWeb',
 #  rewrites => [{ rewrite_rule => []}]
   proxy_pass => [{path => '/djangoadmin/',
                   url => 'http://localhost:8000/djangoadmin/'},
@@ -43,14 +43,14 @@ apache::vhost { 'GCWeb':
 # Configure GCWeb/phpbb
 #
 
-file {'/vagrant/projects/GCWeb/forum/config.php':
+file {'/vagrant/src/GCWeb/forum/config.php':
    ensure => 'present',
    source => '/vagrant/files/phpbb_config.php',
    mode => '0777',  # mode does not work in synced folder
    notify => Service["apache2"]
 }
 
-file {'/vagrant/projects/GCWeb/library/includes/config.php':
+file {'/vagrant/src/GCWeb/library/includes/config.php':
    ensure => 'present',
    source => '/vagrant/files/library_includes_config.php',
    mode => '0777',  # mode does not work in synced folder
@@ -61,10 +61,10 @@ file {'/vagrant/projects/GCWeb/library/includes/config.php':
 # isn't possible from within the VM. Moved this to Vagrantfile
 # exec {'Change phpbb $ permissions':
 #   command => "/vagrant/files/phpbb_change_permissions.sh",
-#   require => File["/vagrant/projects/GCWeb/forum/config.php"],
+#   require => File["/vagrant/src/GCWeb/forum/config.php"],
 # }
 
-file {'/vagrant/projects/GCWeb/forum/install':
+file {'/vagrant/src/GCWeb/forum/install':
   ensure => 'absent',
   force => 'true'
 }
@@ -112,7 +112,7 @@ package {['python-dev',
   ensure => 'latest'
   }
 
-python::requirements { '/vagrant/projects/gcabc/abcapp/requirements.txt':
+python::requirements { '/vagrant/src/gcabc/abcapp/requirements.txt':
   virtualenv    => '/home/vagrant/gcdjango',
   owner         => 'vagrant',
   require       => [Python::Virtualenv['/home/vagrant/gcdjango'],

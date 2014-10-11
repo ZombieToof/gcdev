@@ -19,28 +19,29 @@ Requirements
 
 1. Have VirtualBox installed
 2. Have Vagrant installed
-3. Have access to KoffeinFlummi's GCWeb repository on github so it can 
-   be checked out as a submodule. If you don't checkout this config you
-   can move a copy of the GCWeb repository to ./projects/GCWeb.
+3. Have access to KoffeinFlummi's GCWeb.
 
 
 Installation
 ============
 
-Checkout this repository, change to the repository root and run::
+* Clone this repository.
+* Clone Koffeinflumis GCWeb repository into the ./src/GCWeb
+* Clone the gcabc_ Repository into ./src/gcabc
+* Change to the repository root and run::
 
-  vagrant up
+    vagrant up
 
-`vagrant up` will basicall do the following things:
+  `vagrant up` will basicall do the following things:
 
-* Download a Ubuntu 14.04 vagrant image from ubuntu.com and set up a
-  VM with it
-* Add port forwarding from the client to the host so you can access
-  phpBB/ABC from http://localhost:10080 on the host.
-* Provision the VM with the Software above, especially:
-  * Add a MySQL database for phpBB/ABC
-  * Import the Tables/Data of a new phpBB installation
-  * Configure Apache to serve ./projects/GCWeb
+  * Download a Ubuntu 14.04 vagrant image from ubuntu.com and set up a
+    VM with it
+  * Add port forwarding from the client to the host so you can access
+    phpBB/ABC from http://localhost:10080 on the host.
+  * Provision the VM with the Software above, especially:
+    * Add a MySQL database for phpBB/ABC
+    * Import the Tables/Data of a new phpBB installation
+    * Configure Apache to serve ./projects/GCWeb
 
 
 Customizations

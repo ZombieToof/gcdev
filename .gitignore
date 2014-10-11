@@ -1,4 +1,5 @@
 .vagrant/
+src/
 *~
 files/GCWeb
 .#*
