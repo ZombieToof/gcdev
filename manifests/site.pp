@@ -97,13 +97,6 @@ python::virtualenv { '/home/vagrant/gcdjango':
   timeout      => 0,
 }
 
-python::pip { 'Django':
-  pkgname       => 'https://www.djangoproject.com/download/1.7b1/tarball',
-  virtualenv    => '/home/vagrant/gcdjango',
-  owner         => 'vagrant',
-  require       => Python::Virtualenv['/home/vagrant/gcdjango']
-}
-
 package {['python-dev',
           'tcl-dev',
           'tk-dev',
@@ -114,7 +107,8 @@ package {['python-dev',
           'liblcms2-dev',
           'python-tk',
           'libmysqlclient-dev',
-          'graphviz-dev']:
+          'graphviz-dev',
+          'git']:
   ensure => 'latest'
   }
 
@@ -130,5 +124,6 @@ python::requirements { '/vagrant/projects/gcabc/abcapp/requirements.txt':
                     Package['zlib1g-dev'],
                     Package['libfreetype6-dev'],
                     Package['liblcms2-dev'],
-                    Package['python-tk']]
+                    Package['python-tk'],
+                    Package['git']]
 }
