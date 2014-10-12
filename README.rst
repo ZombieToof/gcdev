@@ -96,10 +96,15 @@ for the urls /djangoadmin and /abc.
 
   Needs to be started manually from the host with::
 
-    ./bin/django_runserver.sh
+    ./bin/django_runserver
     
-  You can get a django shell with::
-    ./bin/django_shell.sh
+  You can get a django shell with…::
+
+    ./bin/django_manage shell
+
+  …and run the tests of abcapp with::
+
+    ./bin/django_manage test abcapp
 
   Before it is usable you have to run the migrations on the host
   which is not done automatically.
