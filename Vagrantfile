@@ -10,15 +10,11 @@ VAGRANTFILE_API_VERSION = "2"
 # virtual machine. So we abuse Vagrant to execude these commands
 # every time it is run.
 # Thanks to tmatilai - http://superuser.com/a/710739
-puts '==============================================================='
-puts 'Changing phpBB permissions from Vagrantfile. Call it a hack ...'
 system('chmod 777 -R ./src/GCWeb/forum/cache')
 system('chmod 777 -R  ./src/GCWeb/forum/config.php')
 system('chmod 777 -R  ./src/GCWeb/forum/files')
 system('chmod 777 -R  ./src/GCWeb/forum/store')
 system('chmod 777 -R  ./src/GCWeb/forum/images/avatars/upload')
-puts '...done.'
-puts '==============================================================='
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
