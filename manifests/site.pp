@@ -8,11 +8,19 @@ $phpbb_url = "http://iweb.dl.sourceforge.net/project/phpbb/phpBB%203/phpBB%203.0
 $home_dir = "/home/vagrant"
 
 # LAMP stack
-package {['php5',
+package {['apache2',
+          'php5',
           'php5-mysql',
           'php5-gd',
+          'libapache2-mod-suphp',
           'imagemagick']:
   ensure => 'latest'
+  }
+
+# suphp is tricky to configur if modphp is loaded.
+# make sure it is not installed
+package {['libapache2-mod-php5']:
+  ensure => 'absent'
   }
 
 class {'apache':
@@ -20,8 +28,9 @@ class {'apache':
   mpm_module => 'prefork'
 }
 
+class { 'apache::mod::suphp': }
 class { 'apache::mod::rewrite': }
-class { 'apache::mod::php': }
+class { 'apache::mod::pph': }
 class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 
@@ -35,39 +44,51 @@ apache::vhost { 'GCWeb':
                  {path => '/static/',
                   url => 'http://localhost:8000/static/'},
                  {path => '/abc/',
-                  url => 'http://localhost:8000/abc/'}]
+                  url => 'http://localhost:8000/abc/'}],
+  suphp_addhandler    => 'x-httpd-php',
+  suphp_engine        => 'on',
+  suphp_configpath    => '/etc/php5/apache2',
 }
 
+
+file {'/etc/suphp/suphp.conf':
+   ensure => 'present',
+   source => '/vagrant/files/suphp.conf',
+   mode => '0411',  # mode does not work in synced folder
+   owner => 'root',
+   group => 'root',
+   notify => Service["apache2"],
+}
 
 #
 # Configure GCWeb/phpbb
 #
 
-file {'/vagrant/src/GCWeb/forum/config.php':
-   ensure => 'present',
-   source => '/vagrant/files/phpbb_config.php',
-   mode => '0777',  # mode does not work in synced folder
-   notify => Service["apache2"]
-}
-
-file {'/vagrant/src/GCWeb/library/includes/config.php':
-   ensure => 'present',
-   source => '/vagrant/files/library_includes_config.php',
-   mode => '0777',  # mode does not work in synced folder
-   notify => Service["apache2"]
-}
-
-# The files are located in a synced folder now. Changing permissions
-# isn't possible from within the VM. Moved this to Vagrantfile
-# exec {'Change phpbb $ permissions':
-#   command => "/vagrant/files/phpbb_change_permissions.sh",
-#   require => File["/vagrant/src/GCWeb/forum/config.php"],
+# file {'/vagrant/src/GCWeb/forum/config.php':
+#    ensure => 'present',
+#    source => '/vagrant/files/phpbb_config.php',
+#    mode => '0777',  # mode does not work in synced folder
+#    notify => Service["apache2"]
 # }
 
-file {'/vagrant/src/GCWeb/forum/install':
-  ensure => 'absent',
-  force => 'true'
-}
+# file {'/vagrant/src/GCWeb/library/includes/config.php':
+#    ensure => 'present',
+#    source => '/vagrant/files/library_includes_config.php',
+#    mode => '0777',  # mode does not work in synced folder
+#    notify => Service["apache2"]
+# }
+
+# # The files are located in a synced folder now. Changing permissions
+# # isn't possible from within the VM. Moved this to Vagrantfile
+# # exec {'Change phpbb $ permissions':
+# #   command => "/vagrant/files/phpbb_change_permissions.sh",
+# #   require => File["/vagrant/src/GCWeb/forum/config.php"],
+# # }
+
+# file {'/vagrant/src/GCWeb/forum/install':
+#   ensure => 'absent',
+#   force => 'true'
+# }
 
 mysql::db {'phpbb':
   user => 'phpbb',
@@ -113,7 +134,9 @@ package {['python-dev',
           'python-tk',
           'libmysqlclient-dev',
           'graphviz-dev',
-          'git']:
+          'git',
+          'emacs24',
+          'acl']:
   ensure => 'latest'
   }
 
