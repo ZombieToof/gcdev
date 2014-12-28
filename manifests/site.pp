@@ -1,4 +1,3 @@
-include '::mysql::server'
 include '::mysql::client'
 
 $phpbb_url_dir = "https://www.phpbb.com/files/release/"
@@ -8,8 +7,7 @@ $phpbb_url = "http://iweb.dl.sourceforge.net/project/phpbb/phpBB%203/phpBB%203.0
 $home_dir = "/home/vagrant"
 
 # LAMP stack
-package {['apache2',
-          'php5',
+package {['php5',
           'php5-mysql',
           'php5-gd',
           'libapache2-mod-suphp',
@@ -30,7 +28,6 @@ class {'apache':
 
 class { 'apache::mod::suphp': }
 class { 'apache::mod::rewrite': }
-class { 'apache::mod::pph': }
 class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 
@@ -90,10 +87,14 @@ file {'/etc/suphp/suphp.conf':
 #   force => 'true'
 # }
 
+class { '::mysql::server':
+  override_options => { 'mysqld' => { 'bind-address' => '0.0.0.0' } }
+}
+
 mysql::db {'phpbb':
   user => 'phpbb',
   password => 'phpbb',
-  host => 'localhost',
+  host => '%',
   grant => ['ALL'],
   sql => '/vagrant/files/phpbb_initial_data.sql'
 } -> mysql_grant { "phpbb@localhost/test_phpbb.*":
