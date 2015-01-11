@@ -10,6 +10,6 @@ echo "load abc demo data..."
 /home/vagrant/gcdjango/bin/python /vagrant/src/gcabc/manage.py gc_demo_data'
 
 # create a clean phpbb database
-$DIR/db_dump_and_load_initial_phpbb3_db.sh
+$DIR/db_drop_and_load_initial_phpbb3_db.sh
 # run abcapp migrations and load the demo data
 vagrant ssh -c "$COMMAND"

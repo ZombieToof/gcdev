@@ -7,7 +7,7 @@ echo "import php_initial_data.sql..."
 mysql -uphpbb -pphpbb phpbb < /vagrant/files/phpbb_initial_data.sql'
 
 # drop and create an empty database
-echo $DIR/db_dump_and_create_empty_db.sh
+echo $DIR/db_drop_and_create_empty_db.sh
 
 # import the data
 vagrant ssh -c "$COMMAND"
