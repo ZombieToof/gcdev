@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.37, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.40, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: phpbb
 -- ------------------------------------------------------
--- Server version	5.5.37-0ubuntu0.14.04.1
+-- Server version	5.5.40-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,795 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `abcapp_army`
+--
+
+DROP TABLE IF EXISTS `abcapp_army`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_army` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `logo` varchar(100) DEFAULT NULL,
+  `tag` varchar(10) DEFAULT NULL,
+  `tag_structure` varchar(200) DEFAULT NULL,
+  `ts_password` varchar(50) DEFAULT NULL,
+  `join_password` varchar(50) DEFAULT NULL,
+  `color` varchar(7) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `general_id` int(10) unsigned DEFAULT NULL,
+  `hc_forum_group_id` int(10) unsigned DEFAULT NULL,
+  `officers_forum_group_id` int(10) unsigned DEFAULT NULL,
+  `soldiers_forum_group_id` int(10) unsigned DEFAULT NULL,
+  `campaign_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_army_3700153c` (`creator_id`),
+  KEY `abcapp_army_05a608e2` (`general_id`),
+  KEY `abcapp_army_6481826b` (`hc_forum_group_id`),
+  KEY `abcapp_army_7d678ea4` (`officers_forum_group_id`),
+  KEY `abcapp_army_9dabd2fd` (`soldiers_forum_group_id`),
+  KEY `abcapp_army_f14acec3` (`campaign_id`),
+  CONSTRAINT `a74d11544ba939c882c2be4cab923f8b` FOREIGN KEY (`officers_forum_group_id`) REFERENCES `phpbb_groups` (`group_id`),
+  CONSTRAINT `abcapp_army_campaign_id_1d5cb883037e6750_fk_abcapp_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `abcapp_campaign` (`id`),
+  CONSTRAINT `abcapp_army_creator_id_16b6edecbed691d7_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_army_general_id_54cd9476c40c748f_fk_phpbb_users_user_id` FOREIGN KEY (`general_id`) REFERENCES `phpbb_users` (`user_id`),
+  CONSTRAINT `abca_hc_forum_group_id_5abd2543964457cd_fk_phpbb_groups_group_id` FOREIGN KEY (`hc_forum_group_id`) REFERENCES `phpbb_groups` (`group_id`),
+  CONSTRAINT `D7246aedc4a4fafcee63460d21c59c47` FOREIGN KEY (`soldiers_forum_group_id`) REFERENCES `phpbb_groups` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_army`
+--
+
+LOCK TABLES `abcapp_army` WRITE;
+/*!40000 ALTER TABLE `abcapp_army` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_army` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_armymembership`
+--
+
+DROP TABLE IF EXISTS `abcapp_armymembership`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_armymembership` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `notes` longtext,
+  `army_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `division_id` int(11),
+  `player_id` int(11) NOT NULL,
+  `rank_id` int(11),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `abcapp_armymembership_player_id_4cf4b0f2f45f90f1_uniq` (`player_id`,`army_id`,`deleted`),
+  KEY `abcapp_armymembership_3fd0c0ba` (`army_id`),
+  KEY `abcapp_armymembership_3700153c` (`creator_id`),
+  KEY `abcapp_armymembership_9ff3405c` (`division_id`),
+  KEY `abcapp_armymembership_afe72417` (`player_id`),
+  KEY `abcapp_armymembership_ed84088f` (`rank_id`),
+  CONSTRAINT `abcapp_armymembership_army_id_6a9795d0c44726db_fk_abcapp_army_id` FOREIGN KEY (`army_id`) REFERENCES `abcapp_army` (`id`),
+  CONSTRAINT `abcapp_armymembership_rank_id_1c9e948d9c7eaf62_fk_abcapp_rank_id` FOREIGN KEY (`rank_id`) REFERENCES `abcapp_rank` (`id`),
+  CONSTRAINT `abcapp_armymembershi_creator_id_77f832456da78c4b_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_armymembersh_player_id_b120dc0d4197b3_fk_abcapp_player_id` FOREIGN KEY (`player_id`) REFERENCES `abcapp_player` (`id`),
+  CONSTRAINT `abcapp_armyme_division_id_16b7204dd994cdd5_fk_abcapp_division_id` FOREIGN KEY (`division_id`) REFERENCES `abcapp_division` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_armymembership`
+--
+
+LOCK TABLES `abcapp_armymembership` WRITE;
+/*!40000 ALTER TABLE `abcapp_armymembership` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_armymembership` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_armymembership_medals`
+--
+
+DROP TABLE IF EXISTS `abcapp_armymembership_medals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_armymembership_medals` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `armymembership_id` int(11) NOT NULL,
+  `medal_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `armymembership_id` (`armymembership_id`,`medal_id`),
+  KEY `abcapp_armymembership_medals_c6c8df1a` (`armymembership_id`),
+  KEY `abcapp_armymembership_medals_6ba83cb9` (`medal_id`),
+  CONSTRAINT `abcapp_armymembersh_medal_id_3707bc38c1afe7d8_fk_abcapp_medal_id` FOREIGN KEY (`medal_id`) REFERENCES `abcapp_medal` (`id`),
+  CONSTRAINT `a_armymembership_id_7393035c186370e3_fk_abcapp_armymembership_id` FOREIGN KEY (`armymembership_id`) REFERENCES `abcapp_armymembership` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_armymembership_medals`
+--
+
+LOCK TABLES `abcapp_armymembership_medals` WRITE;
+/*!40000 ALTER TABLE `abcapp_armymembership_medals` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_armymembership_medals` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_battleday`
+--
+
+DROP TABLE IF EXISTS `abcapp_battleday`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_battleday` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `question_id` int(11) NOT NULL,
+  `campaign_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_battleday_3700153c` (`creator_id`),
+  KEY `abcapp_battleday_7aa0f6ee` (`question_id`),
+  KEY `abcapp_battleday_f14acec3` (`campaign_id`),
+  CONSTRAINT `abcapp_battleday_creator_id_5655b35f8ab35441_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_battle_campaign_id_66deb8795de4a468_fk_abcapp_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `abcapp_campaign` (`id`),
+  CONSTRAINT `D1ebd23e9e9e08de34dee1f9e74d04e6` FOREIGN KEY (`question_id`) REFERENCES `abcapp_battledaysignupquestion` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_battleday`
+--
+
+LOCK TABLES `abcapp_battleday` WRITE;
+/*!40000 ALTER TABLE `abcapp_battleday` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_battleday` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_battledaysignup`
+--
+
+DROP TABLE IF EXISTS `abcapp_battledaysignup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_battledaysignup` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `battleday_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `player_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `abcapp_battledaysignup_battleday_id_1afca15325bd7af0_uniq` (`battleday_id`,`player_id`),
+  KEY `abcapp_battledaysignup_b12fd1ca` (`battleday_id`),
+  KEY `abcapp_battledaysignup_3700153c` (`creator_id`),
+  KEY `abcapp_battledaysignup_afe72417` (`player_id`),
+  CONSTRAINT `abcapp_battledaysignu_creator_id_1dcce2f1a774f03_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_battledays_player_id_2f4a7e324a38460b_fk_abcapp_player_id` FOREIGN KEY (`player_id`) REFERENCES `abcapp_player` (`id`),
+  CONSTRAINT `abcapp_battle_battleday_id_b0d0e68d487c49_fk_abcapp_battleday_id` FOREIGN KEY (`battleday_id`) REFERENCES `abcapp_battleday` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_battledaysignup`
+--
+
+LOCK TABLES `abcapp_battledaysignup` WRITE;
+/*!40000 ALTER TABLE `abcapp_battledaysignup` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_battledaysignup` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_battledaysignup_selected_choices`
+--
+
+DROP TABLE IF EXISTS `abcapp_battledaysignup_selected_choices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_battledaysignup_selected_choices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `battledaysignup_id` int(11) NOT NULL,
+  `battledaysignupquestionchoice_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `battledaysignup_id` (`battledaysignup_id`,`battledaysignupquestionchoice_id`),
+  KEY `abcapp_battledaysignup_selected_choices_2c90665a` (`battledaysignup_id`),
+  KEY `abcapp_battledaysignup_selected_choices_35c7eef8` (`battledaysignupquestionchoice_id`),
+  CONSTRAINT `battledaysignup_id_d5dc6aec86c1d91_fk_abcapp_battledaysignup_id` FOREIGN KEY (`battledaysignup_id`) REFERENCES `abcapp_battledaysignup` (`id`),
+  CONSTRAINT `D8859953df473ce0ac0db289e3f0be98` FOREIGN KEY (`battledaysignupquestionchoice_id`) REFERENCES `abcapp_battledaysignupquestionchoice` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_battledaysignup_selected_choices`
+--
+
+LOCK TABLES `abcapp_battledaysignup_selected_choices` WRITE;
+/*!40000 ALTER TABLE `abcapp_battledaysignup_selected_choices` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_battledaysignup_selected_choices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_battledaysignupquestion`
+--
+
+DROP TABLE IF EXISTS `abcapp_battledaysignupquestion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_battledaysignupquestion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_battledaysignupquestion_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_battledaysignu_creator_id_a0ce5f198f4654f_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_battledaysignupquestion`
+--
+
+LOCK TABLES `abcapp_battledaysignupquestion` WRITE;
+/*!40000 ALTER TABLE `abcapp_battledaysignupquestion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_battledaysignupquestion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_battledaysignupquestionchoice`
+--
+
+DROP TABLE IF EXISTS `abcapp_battledaysignupquestionchoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_battledaysignupquestionchoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `order` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `question_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `abcapp_battledaysignupquestionchoice_order_6147244e54981823_uniq` (`order`,`question_id`),
+  KEY `abcapp_battledaysignupquestionchoice_3700153c` (`creator_id`),
+  KEY `abcapp_battledaysignupquestionchoice_7aa0f6ee` (`question_id`),
+  CONSTRAINT `abcapp_battledaysign_creator_id_63f11e0681a0b8a8_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `D0e3fc54aa4f19a814cedcd2909073ae` FOREIGN KEY (`question_id`) REFERENCES `abcapp_battledaysignupquestion` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_battledaysignupquestionchoice`
+--
+
+LOCK TABLES `abcapp_battledaysignupquestionchoice` WRITE;
+/*!40000 ALTER TABLE `abcapp_battledaysignupquestionchoice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_battledaysignupquestionchoice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_campaign`
+--
+
+DROP TABLE IF EXISTS `abcapp_campaign`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_campaign` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime DEFAULT NULL,
+  `draft_start` datetime DEFAULT NULL,
+  `draft_disabled` tinyint(1) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_campaign_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_campaign_creator_id_fe0e2785004ea04_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_campaign`
+--
+
+LOCK TABLES `abcapp_campaign` WRITE;
+/*!40000 ALTER TABLE `abcapp_campaign` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_campaign` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_campaignmembership`
+--
+
+DROP TABLE IF EXISTS `abcapp_campaignmembership`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_campaignmembership` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `notes` longtext,
+  `campaign_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `player_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `abcapp_campaignmembership_player_id_1220a8471db8a14a_uniq` (`player_id`,`campaign_id`),
+  KEY `abcapp_campaignmembership_f14acec3` (`campaign_id`),
+  KEY `abcapp_campaignmembership_3700153c` (`creator_id`),
+  KEY `abcapp_campaignmembership_afe72417` (`player_id`),
+  CONSTRAINT `abcapp_campaignmembe_creator_id_4c48d933d80bf66a_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_campaignme_player_id_669778f20ab672dc_fk_abcapp_player_id` FOREIGN KEY (`player_id`) REFERENCES `abcapp_player` (`id`),
+  CONSTRAINT `abcapp_campaig_campaign_id_2d8e8a51abfc8bd_fk_abcapp_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `abcapp_campaign` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_campaignmembership`
+--
+
+LOCK TABLES `abcapp_campaignmembership` WRITE;
+/*!40000 ALTER TABLE `abcapp_campaignmembership` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_campaignmembership` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_division`
+--
+
+DROP TABLE IF EXISTS `abcapp_division`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_division` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `logo` varchar(100) DEFAULT NULL,
+  `is_headquater` tinyint(1) NOT NULL,
+  `army_id` int(11) NOT NULL,
+  `commander_id` int(10) unsigned DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_division_3fd0c0ba` (`army_id`),
+  KEY `abcapp_division_bc69ca39` (`commander_id`),
+  KEY `abcapp_division_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_division_army_id_42d744391a4a0f19_fk_abcapp_army_id` FOREIGN KEY (`army_id`) REFERENCES `abcapp_army` (`id`),
+  CONSTRAINT `abcapp_division_creator_id_4794019a0da34309_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_divi_commander_id_47cc1b2ed7659d19_fk_phpbb_users_user_id` FOREIGN KEY (`commander_id`) REFERENCES `phpbb_users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_division`
+--
+
+LOCK TABLES `abcapp_division` WRITE;
+/*!40000 ALTER TABLE `abcapp_division` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_division` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_medal`
+--
+
+DROP TABLE IF EXISTS `abcapp_medal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_medal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `logo` varchar(100) DEFAULT NULL,
+  `level` int(11) NOT NULL,
+  `army_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abcapp_medal_3fd0c0ba` (`army_id`),
+  KEY `abcapp_medal_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_medal_army_id_56d4c7776edecc68_fk_abcapp_army_id` FOREIGN KEY (`army_id`) REFERENCES `abcapp_army` (`id`),
+  CONSTRAINT `abcapp_medal_creator_id_5dd1d609b3909c08_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_medal`
+--
+
+LOCK TABLES `abcapp_medal` WRITE;
+/*!40000 ALTER TABLE `abcapp_medal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_medal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_player`
+--
+
+DROP TABLE IF EXISTS `abcapp_player`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_player` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `django_user_id` int(11) NOT NULL,
+  `phpbb_user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_user_id` (`django_user_id`),
+  UNIQUE KEY `phpbb_user_id` (`phpbb_user_id`),
+  KEY `abcapp_player_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_player_creator_id_1586836bf8d0cccd_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_player_django_user_id_48fd7187f91187ca_fk_auth_user_id` FOREIGN KEY (`django_user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_pla_phpbb_user_id_6e1232a29a01c1bc_fk_phpbb_users_user_id` FOREIGN KEY (`phpbb_user_id`) REFERENCES `phpbb_users` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_player`
+--
+
+LOCK TABLES `abcapp_player` WRITE;
+/*!40000 ALTER TABLE `abcapp_player` DISABLE KEYS */;
+INSERT INTO `abcapp_player` VALUES (1,'2014-12-27 07:44:11','2014-12-27 07:44:11',NULL,NULL,1,2);
+/*!40000 ALTER TABLE `abcapp_player` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `abcapp_rank`
+--
+
+DROP TABLE IF EXISTS `abcapp_rank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abcapp_rank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(400) NOT NULL,
+  `description` longtext NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `abc_logo` varchar(100) DEFAULT NULL,
+  `level` int(11) NOT NULL,
+  `is_officer` tinyint(1) NOT NULL,
+  `army_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `phpbb_rank_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phpbb_rank_id` (`phpbb_rank_id`),
+  KEY `abcapp_rank_3fd0c0ba` (`army_id`),
+  KEY `abcapp_rank_3700153c` (`creator_id`),
+  CONSTRAINT `abcapp_rank_army_id_5fd72f36dc32ae0c_fk_abcapp_army_id` FOREIGN KEY (`army_id`) REFERENCES `abcapp_army` (`id`),
+  CONSTRAINT `abcapp_rank_creator_id_51a2ccf45b1b4d24_fk_auth_user_id` FOREIGN KEY (`creator_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `abcapp_ran_phpbb_rank_id_55b5931c9c060d10_fk_phpbb_ranks_rank_id` FOREIGN KEY (`phpbb_rank_id`) REFERENCES `phpbb_ranks` (`rank_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abcapp_rank`
+--
+
+LOCK TABLES `abcapp_rank` WRITE;
+/*!40000 ALTER TABLE `abcapp_rank` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abcapp_rank` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group`
+--
+
+DROP TABLE IF EXISTS `auth_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group`
+--
+
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_group_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_group_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id` (`group_id`,`permission_id`),
+  KEY `auth_group_permissions_0e939a4f` (`group_id`),
+  KEY `auth_group_permissions_8373b171` (`permission_id`),
+  CONSTRAINT `auth_group_permission_group_id_689710a9a73b7457_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_group__permission_id_1f49ccbbdc69d2fc_fk_auth_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group_permissions`
+--
+
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_permission`
+--
+
+DROP TABLE IF EXISTS `auth_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `content_type_id` int(11) NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
+  KEY `auth_permission_417f1b1c` (`content_type_id`),
+  CONSTRAINT `auth__content_type_id_508cf46651277a81_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_permission`
+--
+
+LOCK TABLES `auth_permission` WRITE;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add user',7,'add_user'),(20,'Can change user',7,'change_user'),(21,'Can delete user',7,'delete_user'),(22,'Can add forum',8,'add_forum'),(23,'Can change forum',8,'change_forum'),(24,'Can delete forum',8,'delete_forum'),(25,'Can add post',9,'add_post'),(26,'Can change post',9,'change_post'),(27,'Can delete post',9,'delete_post'),(28,'Can add topic',10,'add_topic'),(29,'Can change topic',10,'change_topic'),(30,'Can delete topic',10,'delete_topic'),(31,'Can add group',11,'add_group'),(32,'Can change group',11,'change_group'),(33,'Can delete group',11,'delete_group'),(34,'Can add attachment',12,'add_attachment'),(35,'Can change attachment',12,'change_attachment'),(36,'Can delete attachment',12,'delete_attachment'),(37,'Can add config',13,'add_config'),(38,'Can change config',13,'change_config'),(39,'Can delete config',13,'delete_config'),(40,'Can add acl option',14,'add_acloption'),(41,'Can change acl option',14,'change_acloption'),(42,'Can delete acl option',14,'delete_acloption'),(43,'Can add acl role',15,'add_aclrole'),(44,'Can change acl role',15,'change_aclrole'),(45,'Can delete acl role',15,'delete_aclrole'),(46,'Can add acl role data',16,'add_aclroledata'),(47,'Can change acl role data',16,'change_aclroledata'),(48,'Can delete acl role data',16,'delete_aclroledata'),(49,'Can add banlist',17,'add_banlist'),(50,'Can change banlist',17,'change_banlist'),(51,'Can delete banlist',17,'delete_banlist'),(52,'Can add bbcode',18,'add_bbcode'),(53,'Can change bbcode',18,'change_bbcode'),(54,'Can delete bbcode',18,'delete_bbcode'),(55,'Can add bookmark',19,'add_bookmark'),(56,'Can change bookmark',19,'change_bookmark'),(57,'Can delete bookmark',19,'delete_bookmark'),(58,'Can add bot',20,'add_bot'),(59,'Can change bot',20,'change_bot'),(60,'Can delete bot',20,'delete_bot'),(61,'Can add confirm',21,'add_confirm'),(62,'Can change confirm',21,'change_confirm'),(63,'Can delete confirm',21,'delete_confirm'),(64,'Can add disallow',22,'add_disallow'),(65,'Can change disallow',22,'change_disallow'),(66,'Can delete disallow',22,'delete_disallow'),(67,'Can add draft',23,'add_draft'),(68,'Can change draft',23,'change_draft'),(69,'Can delete draft',23,'delete_draft'),(70,'Can add extension group',24,'add_extensiongroup'),(71,'Can change extension group',24,'change_extensiongroup'),(72,'Can delete extension group',24,'delete_extensiongroup'),(73,'Can add extension',25,'add_extension'),(74,'Can change extension',25,'change_extension'),(75,'Can delete extension',25,'delete_extension'),(76,'Can add icon',26,'add_icon'),(77,'Can change icon',26,'change_icon'),(78,'Can delete icon',26,'delete_icon'),(79,'Can add lang',27,'add_lang'),(80,'Can change lang',27,'change_lang'),(81,'Can delete lang',27,'delete_lang'),(82,'Can add log',28,'add_log'),(83,'Can change log',28,'change_log'),(84,'Can delete log',28,'delete_log'),(85,'Can add module',29,'add_module'),(86,'Can change module',29,'change_module'),(87,'Can delete module',29,'delete_module'),(88,'Can add privmsg',30,'add_privmsg'),(89,'Can change privmsg',30,'change_privmsg'),(90,'Can delete privmsg',30,'delete_privmsg'),(91,'Can add privmsg folder',31,'add_privmsgfolder'),(92,'Can change privmsg folder',31,'change_privmsgfolder'),(93,'Can delete privmsg folder',31,'delete_privmsgfolder'),(94,'Can add privmsg rules',32,'add_privmsgrules'),(95,'Can change privmsg rules',32,'change_privmsgrules'),(96,'Can delete privmsg rules',32,'delete_privmsgrules'),(97,'Can add profile field',33,'add_profilefield'),(98,'Can change profile field',33,'change_profilefield'),(99,'Can delete profile field',33,'delete_profilefield'),(100,'Can add profile field data',34,'add_profilefielddata'),(101,'Can change profile field data',34,'change_profilefielddata'),(102,'Can delete profile field data',34,'delete_profilefielddata'),(103,'Can add profile field lang',35,'add_profilefieldlang'),(104,'Can change profile field lang',35,'change_profilefieldlang'),(105,'Can delete profile field lang',35,'delete_profilefieldlang'),(106,'Can add profile lang',36,'add_profilelang'),(107,'Can change profile lang',36,'change_profilelang'),(108,'Can delete profile lang',36,'delete_profilelang'),(109,'Can add rank',37,'add_rank'),(110,'Can change rank',37,'change_rank'),(111,'Can delete rank',37,'delete_rank'),(112,'Can add report',38,'add_report'),(113,'Can change report',38,'change_report'),(114,'Can delete report',38,'delete_report'),(115,'Can add report reasons',39,'add_reportreasons'),(116,'Can change report reasons',39,'change_reportreasons'),(117,'Can delete report reasons',39,'delete_reportreasons'),(118,'Can add search result',40,'add_searchresult'),(119,'Can change search result',40,'change_searchresult'),(120,'Can delete search result',40,'delete_searchresult'),(121,'Can add search wordlist',41,'add_searchwordlist'),(122,'Can change search wordlist',41,'change_searchwordlist'),(123,'Can delete search wordlist',41,'delete_searchwordlist'),(124,'Can add session',42,'add_session'),(125,'Can change session',42,'change_session'),(126,'Can delete session',42,'delete_session'),(127,'Can add sitelist',43,'add_sitelist'),(128,'Can change sitelist',43,'change_sitelist'),(129,'Can delete sitelist',43,'delete_sitelist'),(130,'Can add smilie',44,'add_smilie'),(131,'Can change smilie',44,'change_smilie'),(132,'Can delete smilie',44,'delete_smilie'),(133,'Can add style',45,'add_style'),(134,'Can change style',45,'change_style'),(135,'Can delete style',45,'delete_style'),(136,'Can add style imageset',46,'add_styleimageset'),(137,'Can change style imageset',46,'change_styleimageset'),(138,'Can delete style imageset',46,'delete_styleimageset'),(139,'Can add style imageset data',47,'add_styleimagesetdata'),(140,'Can change style imageset data',47,'change_styleimagesetdata'),(141,'Can delete style imageset data',47,'delete_styleimagesetdata'),(142,'Can add style template',48,'add_styletemplate'),(143,'Can change style template',48,'change_styletemplate'),(144,'Can delete style template',48,'delete_styletemplate'),(145,'Can add style template data',49,'add_styletemplatedata'),(146,'Can change style template data',49,'change_styletemplatedata'),(147,'Can delete style template data',49,'delete_styletemplatedata'),(148,'Can add style theme',50,'add_styletheme'),(149,'Can change style theme',50,'change_styletheme'),(150,'Can delete style theme',50,'delete_styletheme'),(151,'Can add topic track',51,'add_topictrack'),(152,'Can change topic track',51,'change_topictrack'),(153,'Can delete topic track',51,'delete_topictrack'),(154,'Can add warning',52,'add_warning'),(155,'Can change warning',52,'change_warning'),(156,'Can delete warning',52,'delete_warning'),(157,'Can add word',53,'add_word'),(158,'Can change word',53,'change_word'),(159,'Can delete word',53,'delete_word'),(160,'Can add zebra',54,'add_zebra'),(161,'Can change zebra',54,'change_zebra'),(162,'Can delete zebra',54,'delete_zebra'),(163,'Can add campaign',55,'add_campaign'),(164,'Can change campaign',55,'change_campaign'),(165,'Can delete campaign',55,'delete_campaign'),(166,'Can add army',56,'add_army'),(167,'Can change army',56,'change_army'),(168,'Can delete army',56,'delete_army'),(169,'Can add division',57,'add_division'),(170,'Can change division',57,'change_division'),(171,'Can delete division',57,'delete_division'),(172,'Can add rank',58,'add_rank'),(173,'Can change rank',58,'change_rank'),(174,'Can delete rank',58,'delete_rank'),(175,'Can add medal',59,'add_medal'),(176,'Can change medal',59,'change_medal'),(177,'Can delete medal',59,'delete_medal'),(178,'Can add army membership',60,'add_armymembership'),(179,'Can change army membership',60,'change_armymembership'),(180,'Can delete army membership',60,'delete_armymembership'),(181,'Can add campaign membership',61,'add_campaignmembership'),(182,'Can change campaign membership',61,'change_campaignmembership'),(183,'Can delete campaign membership',61,'delete_campaignmembership'),(184,'Can add player',62,'add_player'),(185,'Can change player',62,'change_player'),(186,'Can delete player',62,'delete_player'),(187,'Can add battle day signup question',63,'add_battledaysignupquestion'),(188,'Can change battle day signup question',63,'change_battledaysignupquestion'),(189,'Can delete battle day signup question',63,'delete_battledaysignupquestion'),(190,'Can add battle day signup question choice',64,'add_battledaysignupquestionchoice'),(191,'Can change battle day signup question choice',64,'change_battledaysignupquestionchoice'),(192,'Can delete battle day signup question choice',64,'delete_battledaysignupquestionchoice'),(193,'Can add battle day',65,'add_battleday'),(194,'Can change battle day',65,'change_battleday'),(195,'Can delete battle day',65,'delete_battleday'),(196,'Can add battle day signup',66,'add_battledaysignup'),(197,'Can change battle day signup',66,'change_battledaysignup'),(198,'Can delete battle day signup',66,'delete_battledaysignup');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user`
+--
+
+DROP TABLE IF EXISTS `auth_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime NOT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `email` varchar(75) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user`
+--
+
+LOCK TABLES `auth_user` WRITE;
+/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+INSERT INTO `auth_user` VALUES (1,'','2014-12-27 07:44:10',0,'phpbb_2','','','',0,1,'2014-12-27 07:44:10');
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_groups`
+--
+
+DROP TABLE IF EXISTS `auth_user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`group_id`),
+  KEY `auth_user_groups_e8701ad4` (`user_id`),
+  KEY `auth_user_groups_0e939a4f` (`group_id`),
+  CONSTRAINT `auth_user_groups_group_id_33ac548dcf5f8e37_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_user_groups_user_id_4b5ed4ffdb8fd9b0_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_groups`
+--
+
+LOCK TABLES `auth_user_groups` WRITE;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_user_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_user_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user_user_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`permission_id`),
+  KEY `auth_user_user_permissions_e8701ad4` (`user_id`),
+  KEY `auth_user_user_permissions_8373b171` (`permission_id`),
+  CONSTRAINT `auth_user_user_permissi_user_id_7f0938558328534a_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `auth_user_u_permission_id_384b62483d7071f0_fk_auth_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_user_permissions`
+--
+
+LOCK TABLES `auth_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_admin_log`
+--
+
+DROP TABLE IF EXISTS `django_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_admin_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action_time` datetime NOT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint(5) unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  `content_type_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_417f1b1c` (`content_type_id`),
+  KEY `django_admin_log_e8701ad4` (`user_id`),
+  CONSTRAINT `django_admin_log_user_id_52fdd58701c5f563_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `djang_content_type_id_697914295151027a_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_admin_log`
+--
+
+LOCK TABLES `django_admin_log` WRITE;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_content_type`
+--
+
+DROP TABLE IF EXISTS `django_content_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_content_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_content_type`
+--
+
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'user','django_phpBB3','user'),(8,'forum','django_phpBB3','forum'),(9,'post','django_phpBB3','post'),(10,'topic','django_phpBB3','topic'),(11,'group','django_phpBB3','group'),(12,'attachment','django_phpBB3','attachment'),(13,'config','django_phpBB3','config'),(14,'acl option','django_phpBB3','acloption'),(15,'acl role','django_phpBB3','aclrole'),(16,'acl role data','django_phpBB3','aclroledata'),(17,'banlist','django_phpBB3','banlist'),(18,'bbcode','django_phpBB3','bbcode'),(19,'bookmark','django_phpBB3','bookmark'),(20,'bot','django_phpBB3','bot'),(21,'confirm','django_phpBB3','confirm'),(22,'disallow','django_phpBB3','disallow'),(23,'draft','django_phpBB3','draft'),(24,'extension group','django_phpBB3','extensiongroup'),(25,'extension','django_phpBB3','extension'),(26,'icon','django_phpBB3','icon'),(27,'lang','django_phpBB3','lang'),(28,'log','django_phpBB3','log'),(29,'module','django_phpBB3','module'),(30,'privmsg','django_phpBB3','privmsg'),(31,'privmsg folder','django_phpBB3','privmsgfolder'),(32,'privmsg rules','django_phpBB3','privmsgrules'),(33,'profile field','django_phpBB3','profilefield'),(34,'profile field data','django_phpBB3','profilefielddata'),(35,'profile field lang','django_phpBB3','profilefieldlang'),(36,'profile lang','django_phpBB3','profilelang'),(37,'rank','django_phpBB3','rank'),(38,'report','django_phpBB3','report'),(39,'report reasons','django_phpBB3','reportreasons'),(40,'search result','django_phpBB3','searchresult'),(41,'search wordlist','django_phpBB3','searchwordlist'),(42,'session','django_phpBB3','session'),(43,'sitelist','django_phpBB3','sitelist'),(44,'smilie','django_phpBB3','smilie'),(45,'style','django_phpBB3','style'),(46,'style imageset','django_phpBB3','styleimageset'),(47,'style imageset data','django_phpBB3','styleimagesetdata'),(48,'style template','django_phpBB3','styletemplate'),(49,'style template data','django_phpBB3','styletemplatedata'),(50,'style theme','django_phpBB3','styletheme'),(51,'topic track','django_phpBB3','topictrack'),(52,'warning','django_phpBB3','warning'),(53,'word','django_phpBB3','word'),(54,'zebra','django_phpBB3','zebra'),(55,'campaign','abcapp','campaign'),(56,'army','abcapp','army'),(57,'division','abcapp','division'),(58,'rank','abcapp','rank'),(59,'medal','abcapp','medal'),(60,'army membership','abcapp','armymembership'),(61,'campaign membership','abcapp','campaignmembership'),(62,'player','abcapp','player'),(63,'battle day signup question','abcapp','battledaysignupquestion'),(64,'battle day signup question choice','abcapp','battledaysignupquestionchoice'),(65,'battle day','abcapp','battleday'),(66,'battle day signup','abcapp','battledaysignup');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_migrations`
+--
+
+DROP TABLE IF EXISTS `django_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_migrations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `applied` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_migrations`
+--
+
+LOCK TABLES `django_migrations` WRITE;
+/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2014-12-27 07:11:24'),(2,'auth','0001_initial','2014-12-27 07:11:25'),(3,'abcapp','0001_adjust_phpbb','2014-12-27 07:11:25'),(4,'abcapp','0002_auto_20140817_1336','2014-12-27 07:11:31'),(5,'admin','0001_initial','2014-12-27 07:12:07'),(6,'sessions','0001_initial','2014-12-27 07:12:07');
+/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_session`
+--
+
+DROP TABLE IF EXISTS `django_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_de54fa62` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_session`
+--
+
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `phpbb_acl_groups`
@@ -342,6 +1131,30 @@ INSERT INTO `phpbb_config` VALUES ('active_sessions','0',0),('allow_attachments'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `phpbb_config_text`
+--
+
+DROP TABLE IF EXISTS `phpbb_config_text`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_config_text` (
+  `config_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `config_value` mediumtext COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`config_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_config_text`
+--
+
+LOCK TABLES `phpbb_config_text` WRITE;
+/*!40000 ALTER TABLE `phpbb_config_text` DISABLE KEYS */;
+INSERT INTO `phpbb_config_text` VALUES ('contact_admin_info',''),('contact_admin_info_bitfield',''),('contact_admin_info_flags','7'),('contact_admin_info_uid','');
+/*!40000 ALTER TABLE `phpbb_config_text` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `phpbb_confirm`
 --
 
@@ -419,6 +1232,30 @@ CREATE TABLE `phpbb_drafts` (
 LOCK TABLES `phpbb_drafts` WRITE;
 /*!40000 ALTER TABLE `phpbb_drafts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phpbb_drafts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_ext`
+--
+
+DROP TABLE IF EXISTS `phpbb_ext`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_ext` (
+  `ext_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `ext_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ext_state` text COLLATE utf8_bin NOT NULL,
+  UNIQUE KEY `ext_name` (`ext_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_ext`
+--
+
+LOCK TABLES `phpbb_ext` WRITE;
+/*!40000 ALTER TABLE `phpbb_ext` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phpbb_ext` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -618,50 +1455,6 @@ LOCK TABLES `phpbb_forums_watch` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `phpbb_groups`
---
-
-DROP TABLE IF EXISTS `phpbb_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `phpbb_groups` (
-  `group_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `group_type` tinyint(4) NOT NULL DEFAULT '1',
-  `group_founder_manage` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `group_skip_auth` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `group_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `group_desc` text COLLATE utf8_bin NOT NULL,
-  `group_desc_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `group_desc_options` int(11) unsigned NOT NULL DEFAULT '7',
-  `group_desc_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `group_display` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `group_avatar` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `group_avatar_type` tinyint(2) NOT NULL DEFAULT '0',
-  `group_avatar_width` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `group_avatar_height` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `group_rank` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `group_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `group_sig_chars` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `group_receive_pm` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `group_message_limit` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `group_max_recipients` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `group_legend` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`group_id`),
-  KEY `group_legend_name` (`group_legend`,`group_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `phpbb_groups`
---
-
-LOCK TABLES `phpbb_groups` WRITE;
-/*!40000 ALTER TABLE `phpbb_groups` DISABLE KEYS */;
-INSERT INTO `phpbb_groups` VALUES (1,3,0,0,'GUESTS','','',7,'',0,'',0,0,0,0,'',0,0,0,5,0),(2,3,0,0,'REGISTERED','','',7,'',0,'',0,0,0,0,'',0,0,0,5,0),(3,3,0,0,'REGISTERED_COPPA','','',7,'',0,'',0,0,0,0,'',0,0,0,5,0),(4,3,0,0,'GLOBAL_MODERATORS','','',7,'',0,'',0,0,0,0,'00AA00',0,0,0,0,1),(5,3,1,0,'ADMINISTRATORS','','',7,'',0,'',0,0,0,0,'AA0000',0,0,0,0,1),(6,3,0,0,'BOTS','','',7,'',0,'',0,0,0,0,'9E8DA7',0,0,0,5,0),(7,3,0,0,'NEWLY_REGISTERED','','',7,'',0,'',0,0,0,0,'',0,0,0,5,0);
-/*!40000 ALTER TABLE `phpbb_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `phpbb_icons`
 --
 
@@ -715,7 +1508,7 @@ CREATE TABLE `phpbb_lang` (
 
 LOCK TABLES `phpbb_lang` WRITE;
 /*!40000 ALTER TABLE `phpbb_lang` DISABLE KEYS */;
-INSERT INTO `phpbb_lang` VALUES (1,'en','en','British English','British English','phpBB Group');
+INSERT INTO `phpbb_lang` VALUES (1,'en','en','British English','British English','phpBB Limited');
 /*!40000 ALTER TABLE `phpbb_lang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -743,7 +1536,7 @@ CREATE TABLE `phpbb_log` (
   KEY `topic_id` (`topic_id`),
   KEY `reportee_id` (`reportee_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -752,7 +1545,7 @@ CREATE TABLE `phpbb_log` (
 
 LOCK TABLES `phpbb_log` WRITE;
 /*!40000 ALTER TABLE `phpbb_log` DISABLE KEYS */;
-INSERT INTO `phpbb_log` VALUES (1,0,2,0,0,0,'10.0.2.2',1398381059,'LOG_INSTALL_INSTALLED','a:1:{i:0;s:6:\"3.0.12\";}'),(2,0,2,0,0,0,'10.0.2.2',1398381910,'LOG_TEMPLATE_ADD_FS','a:1:{i:0;s:7:\"GCstyle\";}'),(3,0,2,0,0,0,'10.0.2.2',1398381910,'LOG_THEME_ADD_FS','a:1:{i:0;s:7:\"GCstyle\";}'),(4,0,2,0,0,0,'10.0.2.2',1398381910,'LOG_IMAGESET_ADD_FS','a:1:{i:0;s:7:\"GCstyle\";}'),(5,0,2,0,0,0,'10.0.2.2',1398381910,'LOG_STYLE_ADD','a:1:{i:0;s:7:\"GCstyle\";}'),(6,0,2,0,0,0,'10.0.2.2',1398382093,'LOG_STYLE_EDIT_DETAILS','a:1:{i:0;s:7:\"GCstyle\";}'),(7,0,1,0,0,0,'10.0.2.2',1398382145,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(8,0,1,0,0,0,'10.0.2.2',1398382474,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(9,0,2,0,0,0,'10.0.2.2',1398382478,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(10,0,2,0,0,0,'10.0.2.2',1398382499,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(11,0,2,0,0,0,'10.0.2.2',1398382523,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(12,0,2,0,0,0,'10.0.2.2',1398382529,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(13,0,2,0,0,0,'10.0.2.2',1398382556,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(14,0,2,0,0,0,'10.0.2.2',1398382717,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(15,0,1,0,0,0,'10.0.2.2',1398399740,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(16,0,1,0,0,0,'10.0.2.2',1398399773,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(17,0,1,0,0,0,'10.0.2.2',1398399783,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(18,0,2,0,0,0,'10.0.2.2',1398399785,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(19,0,2,0,0,0,'10.0.2.2',1398399791,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(20,0,2,0,0,0,'10.0.2.2',1398399806,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(21,0,2,0,0,0,'10.0.2.2',1398399811,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(22,0,2,0,0,0,'10.0.2.2',1398399811,'LOG_ADMIN_AUTH_SUCCESS',''),(23,0,2,0,0,0,'10.0.2.2',1398399813,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(24,0,2,0,0,0,'10.0.2.2',1398399931,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(25,0,2,0,0,0,'10.0.2.2',1398400065,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(26,0,2,0,0,0,'10.0.2.2',1398400282,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(27,0,2,0,0,0,'10.0.2.2',1398400295,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(28,0,2,0,0,0,'10.0.2.2',1398400362,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(29,0,2,0,0,0,'10.0.2.2',1398400363,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(30,0,2,0,0,0,'10.0.2.2',1398400364,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(31,0,2,0,0,0,'10.0.2.2',1398400375,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(32,0,2,0,0,0,'10.0.2.2',1398400396,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(33,0,2,0,0,0,'10.0.2.2',1398400398,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(34,0,2,0,0,0,'10.0.2.2',1398400399,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(35,0,2,0,0,0,'10.0.2.2',1398400399,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(36,0,2,0,0,0,'10.0.2.2',1398400399,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(37,0,2,0,0,0,'10.0.2.2',1398400422,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(38,0,1,0,0,0,'10.0.2.2',1398422597,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(39,0,1,0,0,0,'10.0.2.2',1398422607,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(40,0,1,0,0,0,'10.0.2.2',1398422609,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(41,0,1,0,0,0,'10.0.2.2',1398422611,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(42,0,1,0,0,0,'10.0.2.2',1398422612,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(43,0,1,0,0,0,'10.0.2.2',1398422619,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(44,0,2,0,0,0,'10.0.2.2',1398422622,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(45,0,2,0,0,0,'10.0.2.2',1398423417,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(46,0,2,0,0,0,'10.0.2.2',1398423420,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(47,0,2,0,0,0,'10.0.2.2',1398423422,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(48,0,2,0,0,0,'10.0.2.2',1398423423,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(49,0,2,0,0,0,'10.0.2.2',1398423423,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(50,0,2,0,0,0,'10.0.2.2',1398423444,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(51,0,2,0,0,0,'10.0.2.2',1398423446,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(52,0,2,0,0,0,'10.0.2.2',1398423447,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(53,0,2,0,0,0,'10.0.2.2',1398423668,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(54,0,2,0,0,0,'10.0.2.2',1398423669,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(55,0,2,0,0,0,'10.0.2.2',1398423670,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(56,0,2,0,0,0,'10.0.2.2',1398423676,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(57,0,2,0,0,0,'10.0.2.2',1398423683,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(58,0,2,0,0,0,'10.0.2.2',1398423689,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(59,0,2,0,0,0,'10.0.2.2',1398423768,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(60,0,2,0,0,0,'10.0.2.2',1398423784,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(61,0,2,0,0,0,'10.0.2.2',1398423789,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(62,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(63,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(64,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(65,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(66,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(67,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(68,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(69,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(70,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(71,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(72,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(73,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(74,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(75,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(76,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(77,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(78,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(79,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(80,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(81,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(82,0,2,0,0,0,'10.0.2.2',1398423790,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(83,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(84,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(85,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(86,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(87,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(88,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(89,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(90,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(91,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(92,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(93,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(94,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(95,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(96,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(97,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(98,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(99,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(100,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(101,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(102,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(103,0,2,0,0,0,'10.0.2.2',1398423795,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(104,0,2,0,0,0,'10.0.2.2',1398423798,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(105,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(106,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(107,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(108,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(109,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(110,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(111,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(112,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(113,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(114,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(115,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(116,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(117,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(118,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(119,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(120,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(121,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(122,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(123,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(124,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(125,0,2,0,0,0,'10.0.2.2',1398423800,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(126,0,2,0,0,0,'10.0.2.2',1398424055,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(127,0,2,0,0,0,'10.0.2.2',1398424057,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(128,0,2,0,0,0,'10.0.2.2',1398424493,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(129,0,2,0,0,0,'10.0.2.2',1398424620,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(130,0,2,0,0,0,'10.0.2.2',1398424623,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(131,0,2,0,0,0,'10.0.2.2',1398424624,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(132,0,2,0,0,0,'10.0.2.2',1398424626,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(133,0,2,0,0,0,'10.0.2.2',1398424640,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(134,0,2,0,0,0,'10.0.2.2',1398424646,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(135,0,1,0,0,0,'10.0.2.2',1398979334,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(136,0,1,0,0,0,'10.0.2.2',1398979342,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(137,0,2,0,0,0,'10.0.2.2',1398979346,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(138,0,2,0,0,0,'10.0.2.2',1398979349,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(139,0,2,0,0,0,'10.0.2.2',1398979357,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(140,0,2,0,0,0,'10.0.2.2',1398979357,'LOG_ADMIN_AUTH_SUCCESS',''),(141,0,2,0,0,0,'10.0.2.2',1398979360,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(142,0,2,0,0,0,'10.0.2.2',1398980618,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(143,0,2,0,0,0,'10.0.2.2',1398983904,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(144,0,2,0,0,0,'10.0.2.2',1398983912,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(145,0,2,0,0,0,'10.0.2.2',1398983916,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(146,0,2,0,0,0,'10.0.2.2',1398983939,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(147,0,2,0,0,0,'10.0.2.2',1398983948,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(148,0,2,0,0,0,'10.0.2.2',1398983971,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}'),(149,0,2,0,0,0,'10.0.2.2',1398983972,'LOG_STYLE_DELETE','a:1:{i:0;s:9:\"prosilver\";}'),(150,0,2,0,0,0,'10.0.2.2',1398983974,'LOG_IMAGESET_LANG_MISSING','a:2:{i:0;s:7:\"GCstyle\";i:1;s:2:\"en\";}');
+INSERT INTO `phpbb_log` VALUES (1,2,2,0,0,0,'10.0.2.2',1419663584,'LOG_ERROR_EMAIL','a:1:{i:0;s:84:\"<strong>EMAIL/PHP/mail()</strong><br /><em>/install/index.php</em><br /><br /><br />\";}'),(2,0,2,0,0,0,'10.0.2.2',1419663584,'LOG_INSTALL_INSTALLED','a:1:{i:0;s:5:\"3.1.2\";}');
 /*!40000 ALTER TABLE `phpbb_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -785,6 +1578,35 @@ CREATE TABLE `phpbb_login_attempts` (
 LOCK TABLES `phpbb_login_attempts` WRITE;
 /*!40000 ALTER TABLE `phpbb_login_attempts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phpbb_login_attempts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_migrations`
+--
+
+DROP TABLE IF EXISTS `phpbb_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_migrations` (
+  `migration_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `migration_depends_on` text COLLATE utf8_bin NOT NULL,
+  `migration_schema_done` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `migration_data_done` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `migration_data_state` text COLLATE utf8_bin NOT NULL,
+  `migration_start_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `migration_end_time` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`migration_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_migrations`
+--
+
+LOCK TABLES `phpbb_migrations` WRITE;
+/*!40000 ALTER TABLE `phpbb_migrations` DISABLE KEYS */;
+INSERT INTO `phpbb_migrations` VALUES ('\\phpbb\\db\\migration\\data\\v30x\\local_url_bbcode','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_0','a:0:{}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_1','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_1_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc2','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc3','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11_rc1','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_10\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11_rc2','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc1','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc2','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc1\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc3','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_1_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_0\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2_rc2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2_rc1\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_3','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_3_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_3_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_4','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_4_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_4_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5','a:1:{i:0;s:52:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5_rc1part2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_4\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5_rc1part2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5_rc1\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc4\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_5\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc1\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc3','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc4','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6_rc3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_rc2\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_pl1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_6\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_rc2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_8','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_8_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_8_rc1','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_7_pl1\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc4\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc1','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_8\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc2','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc3','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc4','a:1:{i:0;s:47:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_9_rc3\";}',1,1,'',1419663584,1419663584),('\\phpbb\\db\\migration\\data\\v310\\acp_prune_users_module','a:1:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\acp_style_components_module','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\allow_cdn','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v310\\jquery_update\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\alpha1','a:18:{i:0;s:46:\"\\phpbb\\db\\migration\\data\\v30x\\local_url_bbcode\";i:1;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_12\";i:2;s:57:\"\\phpbb\\db\\migration\\data\\v310\\acp_style_components_module\";i:3;s:39:\"\\phpbb\\db\\migration\\data\\v310\\allow_cdn\";i:4;s:49:\"\\phpbb\\db\\migration\\data\\v310\\auth_provider_oauth\";i:5;s:37:\"\\phpbb\\db\\migration\\data\\v310\\avatars\";i:6;s:40:\"\\phpbb\\db\\migration\\data\\v310\\boardindex\";i:7;s:44:\"\\phpbb\\db\\migration\\data\\v310\\config_db_text\";i:8;s:45:\"\\phpbb\\db\\migration\\data\\v310\\forgot_password\";i:9;s:41:\"\\phpbb\\db\\migration\\data\\v310\\mod_rewrite\";i:10;s:49:\"\\phpbb\\db\\migration\\data\\v310\\mysql_fulltext_drop\";i:11;s:40:\"\\phpbb\\db\\migration\\data\\v310\\namespaces\";i:12;s:48:\"\\phpbb\\db\\migration\\data\\v310\\notifications_cron\";i:13;s:60:\"\\phpbb\\db\\migration\\data\\v310\\notification_options_reconvert\";i:14;s:38:\"\\phpbb\\db\\migration\\data\\v310\\plupload\";i:15;s:51:\"\\phpbb\\db\\migration\\data\\v310\\signature_module_auth\";i:16;s:52:\"\\phpbb\\db\\migration\\data\\v310\\softdelete_mcp_modules\";i:17;s:38:\"\\phpbb\\db\\migration\\data\\v310\\teampage\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\alpha2','a:2:{i:0;s:36:\"\\phpbb\\db\\migration\\data\\v310\\alpha1\";i:1;s:51:\"\\phpbb\\db\\migration\\data\\v310\\notifications_cron_p2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\alpha3','a:4:{i:0;s:36:\"\\phpbb\\db\\migration\\data\\v310\\alpha2\";i:1;s:42:\"\\phpbb\\db\\migration\\data\\v310\\avatar_types\";i:2;s:39:\"\\phpbb\\db\\migration\\data\\v310\\passwords\";i:3;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\auth_provider_oauth','a:0:{}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\auth_provider_oauth2','a:1:{i:0;s:49:\"\\phpbb\\db\\migration\\data\\v310\\auth_provider_oauth\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\avatar_types','a:2:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";i:1;s:37:\"\\phpbb\\db\\migration\\data\\v310\\avatars\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\avatars','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\beta1','a:7:{i:0;s:36:\"\\phpbb\\db\\migration\\data\\v310\\alpha3\";i:1;s:42:\"\\phpbb\\db\\migration\\data\\v310\\passwords_p2\";i:2;s:52:\"\\phpbb\\db\\migration\\data\\v310\\postgres_fulltext_drop\";i:3;s:63:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_change_load_settings\";i:4;s:51:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_location\";i:5;s:54:\"\\phpbb\\db\\migration\\data\\v310\\soft_delete_mod_convert2\";i:6;s:48:\"\\phpbb\\db\\migration\\data\\v310\\ucp_popuppm_module\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\beta2','a:3:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta1\";i:1;s:52:\"\\phpbb\\db\\migration\\data\\v310\\acp_prune_users_module\";i:2;s:59:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_location_cleanup\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\beta3','a:6:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta2\";i:1;s:50:\"\\phpbb\\db\\migration\\data\\v310\\auth_provider_oauth2\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\board_contact_name\";i:3;s:44:\"\\phpbb\\db\\migration\\data\\v310\\jquery_update2\";i:4;s:50:\"\\phpbb\\db\\migration\\data\\v310\\live_searches_config\";i:5;s:49:\"\\phpbb\\db\\migration\\data\\v310\\prune_shadow_topics\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\beta4','a:3:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta3\";i:1;s:69:\"\\phpbb\\db\\migration\\data\\v310\\extensions_version_check_force_unstable\";i:2;s:58:\"\\phpbb\\db\\migration\\data\\v310\\reset_missing_captcha_plugin\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\board_contact_name','a:1:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\boardindex','a:0:{}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\bot_update','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc6\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\captcha_plugins','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc2\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\config_db_text','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\contact_admin_acp_module','a:0:{}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\contact_admin_form','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v310\\config_db_text\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\dev','a:5:{i:0;s:40:\"\\phpbb\\db\\migration\\data\\v310\\extensions\";i:1;s:45:\"\\phpbb\\db\\migration\\data\\v310\\style_update_p2\";i:2;s:41:\"\\phpbb\\db\\migration\\data\\v310\\timezone_p2\";i:3;s:52:\"\\phpbb\\db\\migration\\data\\v310\\reported_posts_display\";i:4;s:46:\"\\phpbb\\db\\migration\\data\\v310\\migrations_table\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\extensions','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\extensions_version_check_force_unstable','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\forgot_password','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\gold','a:2:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc6\";i:1;s:40:\"\\phpbb\\db\\migration\\data\\v310\\bot_update\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\jquery_update','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\jquery_update2','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v310\\jquery_update\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\live_searches_config','a:0:{}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\migrations_table','a:0:{}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\mod_rewrite','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\mysql_fulltext_drop','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\namespaces','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\notification_options_reconvert','a:1:{i:0;s:54:\"\\phpbb\\db\\migration\\data\\v310\\notifications_schema_fix\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\notifications','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\notifications_cron','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v310\\notifications\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\notifications_cron_p2','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v310\\notifications_cron\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\notifications_schema_fix','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v310\\notifications\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\notifications_use_full_name','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\passwords','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\passwords_convert_p1','a:1:{i:0;s:42:\"\\phpbb\\db\\migration\\data\\v310\\passwords_p2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\passwords_convert_p2','a:1:{i:0;s:50:\"\\phpbb\\db\\migration\\data\\v310\\passwords_convert_p1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\passwords_p2','a:1:{i:0;s:39:\"\\phpbb\\db\\migration\\data\\v310\\passwords\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\plupload','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\postgres_fulltext_drop','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_aol','a:1:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_yahoo_cleanup\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_aol_cleanup','a:1:{i:0;s:46:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_aol\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_change_load_settings','a:1:{i:0;s:54:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_aol_cleanup\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_cleanup','a:2:{i:0;s:52:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_interests\";i:1;s:53:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_occupation\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field','a:1:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_on_memberlist\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_facebook','a:3:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_field_validation_length','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc3\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_googleplus','a:3:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_icq','a:1:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_icq_cleanup','a:1:{i:0;s:46:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_icq\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_interests','a:2:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_location','a:2:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";i:1;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_on_memberlist\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_location_cleanup','a:1:{i:0;s:51:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_location\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_occupation','a:1:{i:0;s:52:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_interests\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_on_memberlist','a:1:{i:0;s:50:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_cleanup\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_skype','a:3:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_twitter','a:3:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_types','a:1:{i:0;s:36:\"\\phpbb\\db\\migration\\data\\v310\\alpha2\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_website','a:2:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_on_memberlist\";i:1;s:54:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_icq_cleanup\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_website_cleanup','a:1:{i:0;s:50:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_website\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_wlm','a:1:{i:0;s:58:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_website_cleanup\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\profilefield_wlm_cleanup','a:1:{i:0;s:46:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_wlm\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_yahoo','a:1:{i:0;s:54:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_wlm_cleanup\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_yahoo_cleanup','a:1:{i:0;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_yahoo\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\profilefield_youtube','a:3:{i:0;s:56:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_contact_field\";i:1;s:55:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_show_novalue\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_types\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\prune_shadow_topics','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc1','a:9:{i:0;s:35:\"\\phpbb\\db\\migration\\data\\v310\\beta4\";i:1;s:54:\"\\phpbb\\db\\migration\\data\\v310\\contact_admin_acp_module\";i:2;s:48:\"\\phpbb\\db\\migration\\data\\v310\\contact_admin_form\";i:3;s:50:\"\\phpbb\\db\\migration\\data\\v310\\passwords_convert_p2\";i:4;s:51:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_facebook\";i:5;s:53:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_googleplus\";i:6;s:48:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_skype\";i:7;s:50:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_twitter\";i:8;s:50:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_youtube\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc2','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc3','a:5:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc2\";i:1;s:45:\"\\phpbb\\db\\migration\\data\\v310\\captcha_plugins\";i:2;s:53:\"\\phpbb\\db\\migration\\data\\v310\\rename_too_long_indexes\";i:3;s:41:\"\\phpbb\\db\\migration\\data\\v310\\search_type\";i:4;s:49:\"\\phpbb\\db\\migration\\data\\v310\\topic_sort_username\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc4','a:2:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc3\";i:1;s:57:\"\\phpbb\\db\\migration\\data\\v310\\notifications_use_full_name\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc5','a:3:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc4\";i:1;s:66:\"\\phpbb\\db\\migration\\data\\v310\\profilefield_field_validation_length\";i:2;s:53:\"\\phpbb\\db\\migration\\data\\v310\\remove_acp_styles_cache\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rc6','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc5\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\remove_acp_styles_cache','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\rc4\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\rename_too_long_indexes','a:1:{i:0;s:43:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_0\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\reported_posts_display','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\reset_missing_captcha_plugin','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\search_type','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\signature_module_auth','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\soft_delete_mod_convert','a:1:{i:0;s:36:\"\\phpbb\\db\\migration\\data\\v310\\alpha3\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\soft_delete_mod_convert2','a:1:{i:0;s:53:\"\\phpbb\\db\\migration\\data\\v310\\soft_delete_mod_convert\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\softdelete_mcp_modules','a:2:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";i:1;s:43:\"\\phpbb\\db\\migration\\data\\v310\\softdelete_p2\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\softdelete_p1','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\softdelete_p2','a:2:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";i:1;s:43:\"\\phpbb\\db\\migration\\data\\v310\\softdelete_p1\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\style_update_p1','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\style_update_p2','a:1:{i:0;s:45:\"\\phpbb\\db\\migration\\data\\v310\\style_update_p1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\teampage','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\timezone','a:1:{i:0;s:44:\"\\phpbb\\db\\migration\\data\\v30x\\release_3_0_11\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\timezone_p2','a:1:{i:0;s:38:\"\\phpbb\\db\\migration\\data\\v310\\timezone\";}',1,1,'',1419663586,1419663586),('\\phpbb\\db\\migration\\data\\v310\\topic_sort_username','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v310\\ucp_popuppm_module','a:1:{i:0;s:33:\"\\phpbb\\db\\migration\\data\\v310\\dev\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v31x\\m_softdelete_global','a:1:{i:0;s:34:\"\\phpbb\\db\\migration\\data\\v31x\\v311\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v31x\\style_update','a:1:{i:0;s:34:\"\\phpbb\\db\\migration\\data\\v310\\gold\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v31x\\v311','a:2:{i:0;s:34:\"\\phpbb\\db\\migration\\data\\v310\\gold\";i:1;s:42:\"\\phpbb\\db\\migration\\data\\v31x\\style_update\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v31x\\v312','a:1:{i:0;s:37:\"\\phpbb\\db\\migration\\data\\v31x\\v312rc1\";}',1,1,'',1419663585,1419663585),('\\phpbb\\db\\migration\\data\\v31x\\v312rc1','a:2:{i:0;s:34:\"\\phpbb\\db\\migration\\data\\v31x\\v311\";i:1;s:49:\"\\phpbb\\db\\migration\\data\\v31x\\m_softdelete_global\";}',1,1,'',1419663585,1419663585);
+/*!40000 ALTER TABLE `phpbb_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -838,7 +1660,7 @@ CREATE TABLE `phpbb_modules` (
   KEY `left_right_id` (`left_id`,`right_id`),
   KEY `module_enabled` (`module_enabled`),
   KEY `class_left_id` (`module_class`,`left_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -847,8 +1669,114 @@ CREATE TABLE `phpbb_modules` (
 
 LOCK TABLES `phpbb_modules` WRITE;
 /*!40000 ALTER TABLE `phpbb_modules` DISABLE KEYS */;
-INSERT INTO `phpbb_modules` VALUES (1,1,1,'','acp',0,1,64,'ACP_CAT_GENERAL','',''),(2,1,1,'','acp',1,4,17,'ACP_QUICK_ACCESS','',''),(3,1,1,'','acp',1,18,41,'ACP_BOARD_CONFIGURATION','',''),(4,1,1,'','acp',1,42,49,'ACP_CLIENT_COMMUNICATION','',''),(5,1,1,'','acp',1,50,63,'ACP_SERVER_CONFIGURATION','',''),(6,1,1,'','acp',0,65,84,'ACP_CAT_FORUMS','',''),(7,1,1,'','acp',6,66,71,'ACP_MANAGE_FORUMS','',''),(8,1,1,'','acp',6,72,83,'ACP_FORUM_BASED_PERMISSIONS','',''),(9,1,1,'','acp',0,85,110,'ACP_CAT_POSTING','',''),(10,1,1,'','acp',9,86,99,'ACP_MESSAGES','',''),(11,1,1,'','acp',9,100,109,'ACP_ATTACHMENTS','',''),(12,1,1,'','acp',0,111,166,'ACP_CAT_USERGROUP','',''),(13,1,1,'','acp',12,112,145,'ACP_CAT_USERS','',''),(14,1,1,'','acp',12,146,153,'ACP_GROUPS','',''),(15,1,1,'','acp',12,154,165,'ACP_USER_SECURITY','',''),(16,1,1,'','acp',0,167,216,'ACP_CAT_PERMISSIONS','',''),(17,1,1,'','acp',16,170,179,'ACP_GLOBAL_PERMISSIONS','',''),(18,1,1,'','acp',16,180,191,'ACP_FORUM_BASED_PERMISSIONS','',''),(19,1,1,'','acp',16,192,201,'ACP_PERMISSION_ROLES','',''),(20,1,1,'','acp',16,202,215,'ACP_PERMISSION_MASKS','',''),(21,1,1,'','acp',0,217,230,'ACP_CAT_STYLES','',''),(22,1,1,'','acp',21,218,221,'ACP_STYLE_MANAGEMENT','',''),(23,1,1,'','acp',21,222,229,'ACP_STYLE_COMPONENTS','',''),(24,1,1,'','acp',0,231,250,'ACP_CAT_MAINTENANCE','',''),(25,1,1,'','acp',24,232,241,'ACP_FORUM_LOGS','',''),(26,1,1,'','acp',24,242,249,'ACP_CAT_DATABASE','',''),(27,1,1,'','acp',0,251,276,'ACP_CAT_SYSTEM','',''),(28,1,1,'','acp',27,252,255,'ACP_AUTOMATION','',''),(29,1,1,'','acp',27,256,267,'ACP_GENERAL_TASKS','',''),(30,1,1,'','acp',27,268,275,'ACP_MODULE_MANAGEMENT','',''),(31,1,1,'','acp',0,277,278,'ACP_CAT_DOT_MODS','',''),(32,1,1,'attachments','acp',3,19,20,'ACP_ATTACHMENT_SETTINGS','attach','acl_a_attach'),(33,1,1,'attachments','acp',11,101,102,'ACP_ATTACHMENT_SETTINGS','attach','acl_a_attach'),(34,1,1,'attachments','acp',11,103,104,'ACP_MANAGE_EXTENSIONS','extensions','acl_a_attach'),(35,1,1,'attachments','acp',11,105,106,'ACP_EXTENSION_GROUPS','ext_groups','acl_a_attach'),(36,1,1,'attachments','acp',11,107,108,'ACP_ORPHAN_ATTACHMENTS','orphan','acl_a_attach'),(37,1,1,'ban','acp',15,155,156,'ACP_BAN_EMAILS','email','acl_a_ban'),(38,1,1,'ban','acp',15,157,158,'ACP_BAN_IPS','ip','acl_a_ban'),(39,1,1,'ban','acp',15,159,160,'ACP_BAN_USERNAMES','user','acl_a_ban'),(40,1,1,'bbcodes','acp',10,87,88,'ACP_BBCODES','bbcodes','acl_a_bbcode'),(41,1,1,'board','acp',3,21,22,'ACP_BOARD_SETTINGS','settings','acl_a_board'),(42,1,1,'board','acp',3,23,24,'ACP_BOARD_FEATURES','features','acl_a_board'),(43,1,1,'board','acp',3,25,26,'ACP_AVATAR_SETTINGS','avatar','acl_a_board'),(44,1,1,'board','acp',3,27,28,'ACP_MESSAGE_SETTINGS','message','acl_a_board'),(45,1,1,'board','acp',10,89,90,'ACP_MESSAGE_SETTINGS','message','acl_a_board'),(46,1,1,'board','acp',3,29,30,'ACP_POST_SETTINGS','post','acl_a_board'),(47,1,1,'board','acp',10,91,92,'ACP_POST_SETTINGS','post','acl_a_board'),(48,1,1,'board','acp',3,31,32,'ACP_SIGNATURE_SETTINGS','signature','acl_a_board'),(49,1,1,'board','acp',3,33,34,'ACP_FEED_SETTINGS','feed','acl_a_board'),(50,1,1,'board','acp',3,35,36,'ACP_REGISTER_SETTINGS','registration','acl_a_board'),(51,1,1,'board','acp',4,43,44,'ACP_AUTH_SETTINGS','auth','acl_a_server'),(52,1,1,'board','acp',4,45,46,'ACP_EMAIL_SETTINGS','email','acl_a_server'),(53,1,1,'board','acp',5,51,52,'ACP_COOKIE_SETTINGS','cookie','acl_a_server'),(54,1,1,'board','acp',5,53,54,'ACP_SERVER_SETTINGS','server','acl_a_server'),(55,1,1,'board','acp',5,55,56,'ACP_SECURITY_SETTINGS','security','acl_a_server'),(56,1,1,'board','acp',5,57,58,'ACP_LOAD_SETTINGS','load','acl_a_server'),(57,1,1,'bots','acp',29,257,258,'ACP_BOTS','bots','acl_a_bots'),(58,1,1,'captcha','acp',3,37,38,'ACP_VC_SETTINGS','visual','acl_a_board'),(59,1,0,'captcha','acp',3,39,40,'ACP_VC_CAPTCHA_DISPLAY','img','acl_a_board'),(60,1,1,'database','acp',26,243,244,'ACP_BACKUP','backup','acl_a_backup'),(61,1,1,'database','acp',26,245,246,'ACP_RESTORE','restore','acl_a_backup'),(62,1,1,'disallow','acp',15,161,162,'ACP_DISALLOW_USERNAMES','usernames','acl_a_names'),(63,1,1,'email','acp',29,259,260,'ACP_MASS_EMAIL','email','acl_a_email && cfg_email_enable'),(64,1,1,'forums','acp',7,67,68,'ACP_MANAGE_FORUMS','manage','acl_a_forum'),(65,1,1,'groups','acp',14,147,148,'ACP_GROUPS_MANAGE','manage','acl_a_group'),(66,1,1,'icons','acp',10,93,94,'ACP_ICONS','icons','acl_a_icons'),(67,1,1,'icons','acp',10,95,96,'ACP_SMILIES','smilies','acl_a_icons'),(68,1,1,'inactive','acp',13,115,116,'ACP_INACTIVE_USERS','list','acl_a_user'),(69,1,1,'jabber','acp',4,47,48,'ACP_JABBER_SETTINGS','settings','acl_a_jabber'),(70,1,1,'language','acp',29,261,262,'ACP_LANGUAGE_PACKS','lang_packs','acl_a_language'),(71,1,1,'logs','acp',25,233,234,'ACP_ADMIN_LOGS','admin','acl_a_viewlogs'),(72,1,1,'logs','acp',25,235,236,'ACP_MOD_LOGS','mod','acl_a_viewlogs'),(73,1,1,'logs','acp',25,237,238,'ACP_USERS_LOGS','users','acl_a_viewlogs'),(74,1,1,'logs','acp',25,239,240,'ACP_CRITICAL_LOGS','critical','acl_a_viewlogs'),(75,1,1,'main','acp',1,2,3,'ACP_INDEX','main',''),(76,1,1,'modules','acp',30,269,270,'ACP','acp','acl_a_modules'),(77,1,1,'modules','acp',30,271,272,'UCP','ucp','acl_a_modules'),(78,1,1,'modules','acp',30,273,274,'MCP','mcp','acl_a_modules'),(79,1,1,'permission_roles','acp',19,193,194,'ACP_ADMIN_ROLES','admin_roles','acl_a_roles && acl_a_aauth'),(80,1,1,'permission_roles','acp',19,195,196,'ACP_USER_ROLES','user_roles','acl_a_roles && acl_a_uauth'),(81,1,1,'permission_roles','acp',19,197,198,'ACP_MOD_ROLES','mod_roles','acl_a_roles && acl_a_mauth'),(82,1,1,'permission_roles','acp',19,199,200,'ACP_FORUM_ROLES','forum_roles','acl_a_roles && acl_a_fauth'),(83,1,1,'permissions','acp',16,168,169,'ACP_PERMISSIONS','intro','acl_a_authusers || acl_a_authgroups || acl_a_viewauth'),(84,1,0,'permissions','acp',20,203,204,'ACP_PERMISSION_TRACE','trace','acl_a_viewauth'),(85,1,1,'permissions','acp',18,181,182,'ACP_FORUM_PERMISSIONS','setting_forum_local','acl_a_fauth && (acl_a_authusers || acl_a_authgroups)'),(86,1,1,'permissions','acp',18,183,184,'ACP_FORUM_PERMISSIONS_COPY','setting_forum_copy','acl_a_fauth && acl_a_authusers && acl_a_authgroups && acl_a_mauth'),(87,1,1,'permissions','acp',18,185,186,'ACP_FORUM_MODERATORS','setting_mod_local','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(88,1,1,'permissions','acp',17,171,172,'ACP_USERS_PERMISSIONS','setting_user_global','acl_a_authusers && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(89,1,1,'permissions','acp',13,117,118,'ACP_USERS_PERMISSIONS','setting_user_global','acl_a_authusers && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(90,1,1,'permissions','acp',18,187,188,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(91,1,1,'permissions','acp',13,119,120,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(92,1,1,'permissions','acp',17,173,174,'ACP_GROUPS_PERMISSIONS','setting_group_global','acl_a_authgroups && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(93,1,1,'permissions','acp',14,149,150,'ACP_GROUPS_PERMISSIONS','setting_group_global','acl_a_authgroups && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(94,1,1,'permissions','acp',18,189,190,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(95,1,1,'permissions','acp',14,151,152,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(96,1,1,'permissions','acp',17,175,176,'ACP_ADMINISTRATORS','setting_admin_global','acl_a_aauth && (acl_a_authusers || acl_a_authgroups)'),(97,1,1,'permissions','acp',17,177,178,'ACP_GLOBAL_MODERATORS','setting_mod_global','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(98,1,1,'permissions','acp',20,205,206,'ACP_VIEW_ADMIN_PERMISSIONS','view_admin_global','acl_a_viewauth'),(99,1,1,'permissions','acp',20,207,208,'ACP_VIEW_USER_PERMISSIONS','view_user_global','acl_a_viewauth'),(100,1,1,'permissions','acp',20,209,210,'ACP_VIEW_GLOBAL_MOD_PERMISSIONS','view_mod_global','acl_a_viewauth'),(101,1,1,'permissions','acp',20,211,212,'ACP_VIEW_FORUM_MOD_PERMISSIONS','view_mod_local','acl_a_viewauth'),(102,1,1,'permissions','acp',20,213,214,'ACP_VIEW_FORUM_PERMISSIONS','view_forum_local','acl_a_viewauth'),(103,1,1,'php_info','acp',29,263,264,'ACP_PHP_INFO','info','acl_a_phpinfo'),(104,1,1,'profile','acp',13,121,122,'ACP_CUSTOM_PROFILE_FIELDS','profile','acl_a_profile'),(105,1,1,'prune','acp',7,69,70,'ACP_PRUNE_FORUMS','forums','acl_a_prune'),(106,1,1,'prune','acp',15,163,164,'ACP_PRUNE_USERS','users','acl_a_userdel'),(107,1,1,'ranks','acp',13,123,124,'ACP_MANAGE_RANKS','ranks','acl_a_ranks'),(108,1,1,'reasons','acp',29,265,266,'ACP_MANAGE_REASONS','main','acl_a_reasons'),(109,1,1,'search','acp',5,59,60,'ACP_SEARCH_SETTINGS','settings','acl_a_search'),(110,1,1,'search','acp',26,247,248,'ACP_SEARCH_INDEX','index','acl_a_search'),(111,1,1,'send_statistics','acp',5,61,62,'ACP_SEND_STATISTICS','send_statistics','acl_a_server'),(112,1,1,'styles','acp',22,219,220,'ACP_STYLES','style','acl_a_styles'),(113,1,1,'styles','acp',23,223,224,'ACP_TEMPLATES','template','acl_a_styles'),(114,1,1,'styles','acp',23,225,226,'ACP_THEMES','theme','acl_a_styles'),(115,1,1,'styles','acp',23,227,228,'ACP_IMAGESETS','imageset','acl_a_styles'),(116,1,1,'update','acp',28,253,254,'ACP_VERSION_CHECK','version_check','acl_a_board'),(117,1,1,'users','acp',13,113,114,'ACP_MANAGE_USERS','overview','acl_a_user'),(118,1,0,'users','acp',13,125,126,'ACP_USER_FEEDBACK','feedback','acl_a_user'),(119,1,0,'users','acp',13,127,128,'ACP_USER_WARNINGS','warnings','acl_a_user'),(120,1,0,'users','acp',13,129,130,'ACP_USER_PROFILE','profile','acl_a_user'),(121,1,0,'users','acp',13,131,132,'ACP_USER_PREFS','prefs','acl_a_user'),(122,1,0,'users','acp',13,133,134,'ACP_USER_AVATAR','avatar','acl_a_user'),(123,1,0,'users','acp',13,135,136,'ACP_USER_RANK','rank','acl_a_user'),(124,1,0,'users','acp',13,137,138,'ACP_USER_SIG','sig','acl_a_user'),(125,1,0,'users','acp',13,139,140,'ACP_USER_GROUPS','groups','acl_a_user && acl_a_group'),(126,1,0,'users','acp',13,141,142,'ACP_USER_PERM','perm','acl_a_user && acl_a_viewauth'),(127,1,0,'users','acp',13,143,144,'ACP_USER_ATTACH','attach','acl_a_user'),(128,1,1,'words','acp',10,97,98,'ACP_WORDS','words','acl_a_words'),(129,1,1,'users','acp',2,5,6,'ACP_MANAGE_USERS','overview','acl_a_user'),(130,1,1,'groups','acp',2,7,8,'ACP_GROUPS_MANAGE','manage','acl_a_group'),(131,1,1,'forums','acp',2,9,10,'ACP_MANAGE_FORUMS','manage','acl_a_forum'),(132,1,1,'logs','acp',2,11,12,'ACP_MOD_LOGS','mod','acl_a_viewlogs'),(133,1,1,'bots','acp',2,13,14,'ACP_BOTS','bots','acl_a_bots'),(134,1,1,'php_info','acp',2,15,16,'ACP_PHP_INFO','info','acl_a_phpinfo'),(135,1,1,'permissions','acp',8,73,74,'ACP_FORUM_PERMISSIONS','setting_forum_local','acl_a_fauth && (acl_a_authusers || acl_a_authgroups)'),(136,1,1,'permissions','acp',8,75,76,'ACP_FORUM_PERMISSIONS_COPY','setting_forum_copy','acl_a_fauth && acl_a_authusers && acl_a_authgroups && acl_a_mauth'),(137,1,1,'permissions','acp',8,77,78,'ACP_FORUM_MODERATORS','setting_mod_local','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(138,1,1,'permissions','acp',8,79,80,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(139,1,1,'permissions','acp',8,81,82,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(140,1,1,'','mcp',0,1,10,'MCP_MAIN','',''),(141,1,1,'','mcp',0,11,18,'MCP_QUEUE','',''),(142,1,1,'','mcp',0,19,32,'MCP_REPORTS','',''),(143,1,1,'','mcp',0,33,38,'MCP_NOTES','',''),(144,1,1,'','mcp',0,39,48,'MCP_WARN','',''),(145,1,1,'','mcp',0,49,56,'MCP_LOGS','',''),(146,1,1,'','mcp',0,57,64,'MCP_BAN','',''),(147,1,1,'ban','mcp',146,58,59,'MCP_BAN_USERNAMES','user','acl_m_ban'),(148,1,1,'ban','mcp',146,60,61,'MCP_BAN_IPS','ip','acl_m_ban'),(149,1,1,'ban','mcp',146,62,63,'MCP_BAN_EMAILS','email','acl_m_ban'),(150,1,1,'logs','mcp',145,50,51,'MCP_LOGS_FRONT','front','acl_m_ || aclf_m_'),(151,1,1,'logs','mcp',145,52,53,'MCP_LOGS_FORUM_VIEW','forum_logs','acl_m_,$id'),(152,1,1,'logs','mcp',145,54,55,'MCP_LOGS_TOPIC_VIEW','topic_logs','acl_m_,$id'),(153,1,1,'main','mcp',140,2,3,'MCP_MAIN_FRONT','front',''),(154,1,1,'main','mcp',140,4,5,'MCP_MAIN_FORUM_VIEW','forum_view','acl_m_,$id'),(155,1,1,'main','mcp',140,6,7,'MCP_MAIN_TOPIC_VIEW','topic_view','acl_m_,$id'),(156,1,1,'main','mcp',140,8,9,'MCP_MAIN_POST_DETAILS','post_details','acl_m_,$id || (!$id && aclf_m_)'),(157,1,1,'notes','mcp',143,34,35,'MCP_NOTES_FRONT','front',''),(158,1,1,'notes','mcp',143,36,37,'MCP_NOTES_USER','user_notes',''),(159,1,1,'pm_reports','mcp',142,20,21,'MCP_PM_REPORTS_OPEN','pm_reports','aclf_m_report'),(160,1,1,'pm_reports','mcp',142,22,23,'MCP_PM_REPORTS_CLOSED','pm_reports_closed','aclf_m_report'),(161,1,1,'pm_reports','mcp',142,24,25,'MCP_PM_REPORT_DETAILS','pm_report_details','aclf_m_report'),(162,1,1,'queue','mcp',141,12,13,'MCP_QUEUE_UNAPPROVED_TOPICS','unapproved_topics','aclf_m_approve'),(163,1,1,'queue','mcp',141,14,15,'MCP_QUEUE_UNAPPROVED_POSTS','unapproved_posts','aclf_m_approve'),(164,1,1,'queue','mcp',141,16,17,'MCP_QUEUE_APPROVE_DETAILS','approve_details','acl_m_approve,$id || (!$id && aclf_m_approve)'),(165,1,1,'reports','mcp',142,26,27,'MCP_REPORTS_OPEN','reports','aclf_m_report'),(166,1,1,'reports','mcp',142,28,29,'MCP_REPORTS_CLOSED','reports_closed','aclf_m_report'),(167,1,1,'reports','mcp',142,30,31,'MCP_REPORT_DETAILS','report_details','acl_m_report,$id || (!$id && aclf_m_report)'),(168,1,1,'warn','mcp',144,40,41,'MCP_WARN_FRONT','front','aclf_m_warn'),(169,1,1,'warn','mcp',144,42,43,'MCP_WARN_LIST','list','aclf_m_warn'),(170,1,1,'warn','mcp',144,44,45,'MCP_WARN_USER','warn_user','aclf_m_warn'),(171,1,1,'warn','mcp',144,46,47,'MCP_WARN_POST','warn_post','acl_m_warn && acl_f_read,$id'),(172,1,1,'','ucp',0,1,12,'UCP_MAIN','',''),(173,1,1,'','ucp',0,13,22,'UCP_PROFILE','',''),(174,1,1,'','ucp',0,23,30,'UCP_PREFS','',''),(175,1,1,'','ucp',0,31,42,'UCP_PM','',''),(176,1,1,'','ucp',0,43,48,'UCP_USERGROUPS','',''),(177,1,1,'','ucp',0,49,54,'UCP_ZEBRA','',''),(178,1,1,'attachments','ucp',172,10,11,'UCP_MAIN_ATTACHMENTS','attachments','acl_u_attach'),(179,1,1,'groups','ucp',176,44,45,'UCP_USERGROUPS_MEMBER','membership',''),(180,1,1,'groups','ucp',176,46,47,'UCP_USERGROUPS_MANAGE','manage',''),(181,1,1,'main','ucp',172,2,3,'UCP_MAIN_FRONT','front',''),(182,1,1,'main','ucp',172,4,5,'UCP_MAIN_SUBSCRIBED','subscribed',''),(183,1,1,'main','ucp',172,6,7,'UCP_MAIN_BOOKMARKS','bookmarks','cfg_allow_bookmarks'),(184,1,1,'main','ucp',172,8,9,'UCP_MAIN_DRAFTS','drafts',''),(185,1,0,'pm','ucp',175,32,33,'UCP_PM_VIEW','view','cfg_allow_privmsg'),(186,1,1,'pm','ucp',175,34,35,'UCP_PM_COMPOSE','compose','cfg_allow_privmsg'),(187,1,1,'pm','ucp',175,36,37,'UCP_PM_DRAFTS','drafts','cfg_allow_privmsg'),(188,1,1,'pm','ucp',175,38,39,'UCP_PM_OPTIONS','options','cfg_allow_privmsg'),(189,1,0,'pm','ucp',175,40,41,'UCP_PM_POPUP_TITLE','popup','cfg_allow_privmsg'),(190,1,1,'prefs','ucp',174,24,25,'UCP_PREFS_PERSONAL','personal',''),(191,1,1,'prefs','ucp',174,26,27,'UCP_PREFS_POST','post',''),(192,1,1,'prefs','ucp',174,28,29,'UCP_PREFS_VIEW','view',''),(193,1,1,'profile','ucp',173,14,15,'UCP_PROFILE_PROFILE_INFO','profile_info',''),(194,1,1,'profile','ucp',173,16,17,'UCP_PROFILE_SIGNATURE','signature','acl_u_sig'),(195,1,1,'profile','ucp',173,18,19,'UCP_PROFILE_AVATAR','avatar','cfg_allow_avatar && (cfg_allow_avatar_local || cfg_allow_avatar_remote || cfg_allow_avatar_upload || cfg_allow_avatar_remote_upload)'),(196,1,1,'profile','ucp',173,20,21,'UCP_PROFILE_REG_DETAILS','reg_details',''),(197,1,1,'zebra','ucp',177,50,51,'UCP_ZEBRA_FRIENDS','friends',''),(198,1,1,'zebra','ucp',177,52,53,'UCP_ZEBRA_FOES','foes','');
+INSERT INTO `phpbb_modules` VALUES (1,1,1,'','acp',0,1,66,'ACP_CAT_GENERAL','',''),(2,1,1,'','acp',1,4,17,'ACP_QUICK_ACCESS','',''),(3,1,1,'','acp',1,18,43,'ACP_BOARD_CONFIGURATION','',''),(4,1,1,'','acp',1,44,51,'ACP_CLIENT_COMMUNICATION','',''),(5,1,1,'','acp',1,52,65,'ACP_SERVER_CONFIGURATION','',''),(6,1,1,'','acp',0,67,86,'ACP_CAT_FORUMS','',''),(7,1,1,'','acp',6,68,73,'ACP_MANAGE_FORUMS','',''),(8,1,1,'','acp',6,74,85,'ACP_FORUM_BASED_PERMISSIONS','',''),(9,1,1,'','acp',0,87,114,'ACP_CAT_POSTING','',''),(10,1,1,'','acp',9,88,101,'ACP_MESSAGES','',''),(11,1,1,'','acp',9,102,113,'ACP_ATTACHMENTS','',''),(12,1,1,'','acp',0,115,172,'ACP_CAT_USERGROUP','',''),(13,1,1,'','acp',12,116,151,'ACP_CAT_USERS','',''),(14,1,1,'','acp',12,152,161,'ACP_GROUPS','',''),(15,1,1,'','acp',12,162,171,'ACP_USER_SECURITY','',''),(16,1,1,'','acp',0,173,222,'ACP_CAT_PERMISSIONS','',''),(17,1,1,'','acp',16,176,185,'ACP_GLOBAL_PERMISSIONS','',''),(18,1,1,'','acp',16,186,197,'ACP_FORUM_BASED_PERMISSIONS','',''),(19,1,1,'','acp',16,198,207,'ACP_PERMISSION_ROLES','',''),(20,1,1,'','acp',16,208,221,'ACP_PERMISSION_MASKS','',''),(21,1,1,'','acp',0,223,238,'ACP_CAT_CUSTOMISE','',''),(22,1,1,'','acp',21,228,233,'ACP_STYLE_MANAGEMENT','',''),(23,1,1,'','acp',21,224,227,'ACP_EXTENSION_MANAGEMENT','',''),(24,1,1,'','acp',21,234,237,'ACP_LANGUAGE','',''),(25,1,1,'','acp',0,239,258,'ACP_CAT_MAINTENANCE','',''),(26,1,1,'','acp',25,240,249,'ACP_FORUM_LOGS','',''),(27,1,1,'','acp',25,250,257,'ACP_CAT_DATABASE','',''),(28,1,1,'','acp',0,259,282,'ACP_CAT_SYSTEM','',''),(29,1,1,'','acp',28,260,263,'ACP_AUTOMATION','',''),(30,1,1,'','acp',28,264,273,'ACP_GENERAL_TASKS','',''),(31,1,1,'','acp',28,274,281,'ACP_MODULE_MANAGEMENT','',''),(32,1,1,'','acp',0,283,284,'ACP_CAT_DOT_MODS','',''),(33,1,1,'acp_attachments','acp',3,19,20,'ACP_ATTACHMENT_SETTINGS','attach','acl_a_attach'),(34,1,1,'acp_attachments','acp',11,103,104,'ACP_ATTACHMENT_SETTINGS','attach','acl_a_attach'),(35,1,1,'acp_attachments','acp',11,105,106,'ACP_MANAGE_EXTENSIONS','extensions','acl_a_attach'),(36,1,1,'acp_attachments','acp',11,107,108,'ACP_EXTENSION_GROUPS','ext_groups','acl_a_attach'),(37,1,1,'acp_attachments','acp',11,109,110,'ACP_ORPHAN_ATTACHMENTS','orphan','acl_a_attach'),(38,1,1,'acp_attachments','acp',11,111,112,'ACP_MANAGE_ATTACHMENTS','manage','acl_a_attach'),(39,1,1,'acp_ban','acp',15,163,164,'ACP_BAN_EMAILS','email','acl_a_ban'),(40,1,1,'acp_ban','acp',15,165,166,'ACP_BAN_IPS','ip','acl_a_ban'),(41,1,1,'acp_ban','acp',15,167,168,'ACP_BAN_USERNAMES','user','acl_a_ban'),(42,1,1,'acp_bbcodes','acp',10,89,90,'ACP_BBCODES','bbcodes','acl_a_bbcode'),(43,1,1,'acp_board','acp',3,21,22,'ACP_BOARD_SETTINGS','settings','acl_a_board'),(44,1,1,'acp_board','acp',3,23,24,'ACP_BOARD_FEATURES','features','acl_a_board'),(45,1,1,'acp_board','acp',3,25,26,'ACP_AVATAR_SETTINGS','avatar','acl_a_board'),(46,1,1,'acp_board','acp',3,27,28,'ACP_MESSAGE_SETTINGS','message','acl_a_board'),(47,1,1,'acp_board','acp',10,91,92,'ACP_MESSAGE_SETTINGS','message','acl_a_board'),(48,1,1,'acp_board','acp',3,29,30,'ACP_POST_SETTINGS','post','acl_a_board'),(49,1,1,'acp_board','acp',10,93,94,'ACP_POST_SETTINGS','post','acl_a_board'),(50,1,1,'acp_board','acp',3,31,32,'ACP_SIGNATURE_SETTINGS','signature','acl_a_board'),(51,1,1,'acp_board','acp',3,33,34,'ACP_FEED_SETTINGS','feed','acl_a_board'),(52,1,1,'acp_board','acp',3,35,36,'ACP_REGISTER_SETTINGS','registration','acl_a_board'),(53,1,1,'acp_board','acp',4,45,46,'ACP_AUTH_SETTINGS','auth','acl_a_server'),(54,1,1,'acp_board','acp',4,47,48,'ACP_EMAIL_SETTINGS','email','acl_a_server'),(55,1,1,'acp_board','acp',5,53,54,'ACP_COOKIE_SETTINGS','cookie','acl_a_server'),(56,1,1,'acp_board','acp',5,55,56,'ACP_SERVER_SETTINGS','server','acl_a_server'),(57,1,1,'acp_board','acp',5,57,58,'ACP_SECURITY_SETTINGS','security','acl_a_server'),(58,1,1,'acp_board','acp',5,59,60,'ACP_LOAD_SETTINGS','load','acl_a_server'),(59,1,1,'acp_bots','acp',30,265,266,'ACP_BOTS','bots','acl_a_bots'),(60,1,1,'acp_captcha','acp',3,37,38,'ACP_VC_SETTINGS','visual','acl_a_board'),(61,1,0,'acp_captcha','acp',3,39,40,'ACP_VC_CAPTCHA_DISPLAY','img','acl_a_board'),(62,1,1,'acp_contact','acp',3,41,42,'ACP_CONTACT_SETTINGS','contact','acl_a_board'),(63,1,1,'acp_database','acp',27,251,252,'ACP_BACKUP','backup','acl_a_backup'),(64,1,1,'acp_database','acp',27,253,254,'ACP_RESTORE','restore','acl_a_backup'),(65,1,1,'acp_disallow','acp',15,169,170,'ACP_DISALLOW_USERNAMES','usernames','acl_a_names'),(66,1,1,'acp_email','acp',30,267,268,'ACP_MASS_EMAIL','email','acl_a_email && cfg_email_enable'),(67,1,1,'acp_extensions','acp',23,225,226,'ACP_EXTENSIONS','main','acl_a_extensions'),(68,1,1,'acp_forums','acp',7,69,70,'ACP_MANAGE_FORUMS','manage','acl_a_forum'),(69,1,1,'acp_groups','acp',14,153,154,'ACP_GROUPS_MANAGE','manage','acl_a_group'),(70,1,1,'acp_groups','acp',14,155,156,'ACP_GROUPS_POSITION','position','acl_a_group'),(71,1,1,'acp_icons','acp',10,95,96,'ACP_ICONS','icons','acl_a_icons'),(72,1,1,'acp_icons','acp',10,97,98,'ACP_SMILIES','smilies','acl_a_icons'),(73,1,1,'acp_inactive','acp',13,117,118,'ACP_INACTIVE_USERS','list','acl_a_user'),(74,1,1,'acp_jabber','acp',4,49,50,'ACP_JABBER_SETTINGS','settings','acl_a_jabber'),(75,1,1,'acp_language','acp',24,235,236,'ACP_LANGUAGE_PACKS','lang_packs','acl_a_language'),(76,1,1,'acp_logs','acp',26,241,242,'ACP_ADMIN_LOGS','admin','acl_a_viewlogs'),(77,1,1,'acp_logs','acp',26,243,244,'ACP_MOD_LOGS','mod','acl_a_viewlogs'),(78,1,1,'acp_logs','acp',26,245,246,'ACP_USERS_LOGS','users','acl_a_viewlogs'),(79,1,1,'acp_logs','acp',26,247,248,'ACP_CRITICAL_LOGS','critical','acl_a_viewlogs'),(80,1,1,'acp_main','acp',1,2,3,'ACP_INDEX','main',''),(81,1,1,'acp_modules','acp',31,275,276,'ACP','acp','acl_a_modules'),(82,1,1,'acp_modules','acp',31,277,278,'UCP','ucp','acl_a_modules'),(83,1,1,'acp_modules','acp',31,279,280,'MCP','mcp','acl_a_modules'),(84,1,1,'acp_permission_roles','acp',19,199,200,'ACP_ADMIN_ROLES','admin_roles','acl_a_roles && acl_a_aauth'),(85,1,1,'acp_permission_roles','acp',19,201,202,'ACP_USER_ROLES','user_roles','acl_a_roles && acl_a_uauth'),(86,1,1,'acp_permission_roles','acp',19,203,204,'ACP_MOD_ROLES','mod_roles','acl_a_roles && acl_a_mauth'),(87,1,1,'acp_permission_roles','acp',19,205,206,'ACP_FORUM_ROLES','forum_roles','acl_a_roles && acl_a_fauth'),(88,1,1,'acp_permissions','acp',16,174,175,'ACP_PERMISSIONS','intro','acl_a_authusers || acl_a_authgroups || acl_a_viewauth'),(89,1,0,'acp_permissions','acp',20,209,210,'ACP_PERMISSION_TRACE','trace','acl_a_viewauth'),(90,1,1,'acp_permissions','acp',18,187,188,'ACP_FORUM_PERMISSIONS','setting_forum_local','acl_a_fauth && (acl_a_authusers || acl_a_authgroups)'),(91,1,1,'acp_permissions','acp',18,189,190,'ACP_FORUM_PERMISSIONS_COPY','setting_forum_copy','acl_a_fauth && acl_a_authusers && acl_a_authgroups && acl_a_mauth'),(92,1,1,'acp_permissions','acp',18,191,192,'ACP_FORUM_MODERATORS','setting_mod_local','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(93,1,1,'acp_permissions','acp',17,177,178,'ACP_USERS_PERMISSIONS','setting_user_global','acl_a_authusers && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(94,1,1,'acp_permissions','acp',13,121,122,'ACP_USERS_PERMISSIONS','setting_user_global','acl_a_authusers && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(95,1,1,'acp_permissions','acp',18,193,194,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(96,1,1,'acp_permissions','acp',13,123,124,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(97,1,1,'acp_permissions','acp',17,179,180,'ACP_GROUPS_PERMISSIONS','setting_group_global','acl_a_authgroups && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(98,1,1,'acp_permissions','acp',14,157,158,'ACP_GROUPS_PERMISSIONS','setting_group_global','acl_a_authgroups && (acl_a_aauth || acl_a_mauth || acl_a_uauth)'),(99,1,1,'acp_permissions','acp',18,195,196,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(100,1,1,'acp_permissions','acp',14,159,160,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(101,1,1,'acp_permissions','acp',17,181,182,'ACP_ADMINISTRATORS','setting_admin_global','acl_a_aauth && (acl_a_authusers || acl_a_authgroups)'),(102,1,1,'acp_permissions','acp',17,183,184,'ACP_GLOBAL_MODERATORS','setting_mod_global','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(103,1,1,'acp_permissions','acp',20,211,212,'ACP_VIEW_ADMIN_PERMISSIONS','view_admin_global','acl_a_viewauth'),(104,1,1,'acp_permissions','acp',20,213,214,'ACP_VIEW_USER_PERMISSIONS','view_user_global','acl_a_viewauth'),(105,1,1,'acp_permissions','acp',20,215,216,'ACP_VIEW_GLOBAL_MOD_PERMISSIONS','view_mod_global','acl_a_viewauth'),(106,1,1,'acp_permissions','acp',20,217,218,'ACP_VIEW_FORUM_MOD_PERMISSIONS','view_mod_local','acl_a_viewauth'),(107,1,1,'acp_permissions','acp',20,219,220,'ACP_VIEW_FORUM_PERMISSIONS','view_forum_local','acl_a_viewauth'),(108,1,1,'acp_php_info','acp',30,269,270,'ACP_PHP_INFO','info','acl_a_phpinfo'),(109,1,1,'acp_profile','acp',13,125,126,'ACP_CUSTOM_PROFILE_FIELDS','profile','acl_a_profile'),(110,1,1,'acp_prune','acp',7,71,72,'ACP_PRUNE_FORUMS','forums','acl_a_prune'),(111,1,1,'acp_prune','acp',13,127,128,'ACP_PRUNE_USERS','users','acl_a_userdel'),(112,1,1,'acp_ranks','acp',13,129,130,'ACP_MANAGE_RANKS','ranks','acl_a_ranks'),(113,1,1,'acp_reasons','acp',30,271,272,'ACP_MANAGE_REASONS','main','acl_a_reasons'),(114,1,1,'acp_search','acp',5,61,62,'ACP_SEARCH_SETTINGS','settings','acl_a_search'),(115,1,1,'acp_search','acp',27,255,256,'ACP_SEARCH_INDEX','index','acl_a_search'),(116,1,1,'acp_send_statistics','acp',5,63,64,'ACP_SEND_STATISTICS','send_statistics','acl_a_server'),(117,1,1,'acp_styles','acp',22,229,230,'ACP_STYLES','style','acl_a_styles'),(118,1,1,'acp_styles','acp',22,231,232,'ACP_STYLES_INSTALL','install','acl_a_styles'),(119,1,1,'acp_update','acp',29,261,262,'ACP_VERSION_CHECK','version_check','acl_a_board'),(120,1,1,'acp_users','acp',13,119,120,'ACP_MANAGE_USERS','overview','acl_a_user'),(121,1,0,'acp_users','acp',13,131,132,'ACP_USER_FEEDBACK','feedback','acl_a_user'),(122,1,0,'acp_users','acp',13,133,134,'ACP_USER_WARNINGS','warnings','acl_a_user'),(123,1,0,'acp_users','acp',13,135,136,'ACP_USER_PROFILE','profile','acl_a_user'),(124,1,0,'acp_users','acp',13,137,138,'ACP_USER_PREFS','prefs','acl_a_user'),(125,1,0,'acp_users','acp',13,139,140,'ACP_USER_AVATAR','avatar','acl_a_user'),(126,1,0,'acp_users','acp',13,141,142,'ACP_USER_RANK','rank','acl_a_user'),(127,1,0,'acp_users','acp',13,143,144,'ACP_USER_SIG','sig','acl_a_user'),(128,1,0,'acp_users','acp',13,145,146,'ACP_USER_GROUPS','groups','acl_a_user && acl_a_group'),(129,1,0,'acp_users','acp',13,147,148,'ACP_USER_PERM','perm','acl_a_user && acl_a_viewauth'),(130,1,0,'acp_users','acp',13,149,150,'ACP_USER_ATTACH','attach','acl_a_user'),(131,1,1,'acp_words','acp',10,99,100,'ACP_WORDS','words','acl_a_words'),(132,1,1,'acp_users','acp',2,5,6,'ACP_MANAGE_USERS','overview','acl_a_user'),(133,1,1,'acp_groups','acp',2,7,8,'ACP_GROUPS_MANAGE','manage','acl_a_group'),(134,1,1,'acp_forums','acp',2,9,10,'ACP_MANAGE_FORUMS','manage','acl_a_forum'),(135,1,1,'acp_logs','acp',2,11,12,'ACP_MOD_LOGS','mod','acl_a_viewlogs'),(136,1,1,'acp_bots','acp',2,13,14,'ACP_BOTS','bots','acl_a_bots'),(137,1,1,'acp_php_info','acp',2,15,16,'ACP_PHP_INFO','info','acl_a_phpinfo'),(138,1,1,'acp_permissions','acp',8,75,76,'ACP_FORUM_PERMISSIONS','setting_forum_local','acl_a_fauth && (acl_a_authusers || acl_a_authgroups)'),(139,1,1,'acp_permissions','acp',8,77,78,'ACP_FORUM_PERMISSIONS_COPY','setting_forum_copy','acl_a_fauth && acl_a_authusers && acl_a_authgroups && acl_a_mauth'),(140,1,1,'acp_permissions','acp',8,79,80,'ACP_FORUM_MODERATORS','setting_mod_local','acl_a_mauth && (acl_a_authusers || acl_a_authgroups)'),(141,1,1,'acp_permissions','acp',8,81,82,'ACP_USERS_FORUM_PERMISSIONS','setting_user_local','acl_a_authusers && (acl_a_mauth || acl_a_fauth)'),(142,1,1,'acp_permissions','acp',8,83,84,'ACP_GROUPS_FORUM_PERMISSIONS','setting_group_local','acl_a_authgroups && (acl_a_mauth || acl_a_fauth)'),(143,1,1,'','mcp',0,1,10,'MCP_MAIN','',''),(144,1,1,'','mcp',0,11,22,'MCP_QUEUE','',''),(145,1,1,'','mcp',0,23,36,'MCP_REPORTS','',''),(146,1,1,'','mcp',0,37,42,'MCP_NOTES','',''),(147,1,1,'','mcp',0,43,52,'MCP_WARN','',''),(148,1,1,'','mcp',0,53,60,'MCP_LOGS','',''),(149,1,1,'','mcp',0,61,68,'MCP_BAN','',''),(150,1,1,'mcp_ban','mcp',149,62,63,'MCP_BAN_USERNAMES','user','acl_m_ban'),(151,1,1,'mcp_ban','mcp',149,64,65,'MCP_BAN_IPS','ip','acl_m_ban'),(152,1,1,'mcp_ban','mcp',149,66,67,'MCP_BAN_EMAILS','email','acl_m_ban'),(153,1,1,'mcp_logs','mcp',148,54,55,'MCP_LOGS_FRONT','front','acl_m_ || aclf_m_'),(154,1,1,'mcp_logs','mcp',148,56,57,'MCP_LOGS_FORUM_VIEW','forum_logs','acl_m_,$id'),(155,1,1,'mcp_logs','mcp',148,58,59,'MCP_LOGS_TOPIC_VIEW','topic_logs','acl_m_,$id'),(156,1,1,'mcp_main','mcp',143,2,3,'MCP_MAIN_FRONT','front',''),(157,1,1,'mcp_main','mcp',143,4,5,'MCP_MAIN_FORUM_VIEW','forum_view','acl_m_,$id'),(158,1,1,'mcp_main','mcp',143,6,7,'MCP_MAIN_TOPIC_VIEW','topic_view','acl_m_,$id'),(159,1,1,'mcp_main','mcp',143,8,9,'MCP_MAIN_POST_DETAILS','post_details','acl_m_,$id || (!$id && aclf_m_)'),(160,1,1,'mcp_notes','mcp',146,38,39,'MCP_NOTES_FRONT','front',''),(161,1,1,'mcp_notes','mcp',146,40,41,'MCP_NOTES_USER','user_notes',''),(162,1,1,'mcp_pm_reports','mcp',145,30,31,'MCP_PM_REPORTS_OPEN','pm_reports','aclf_m_report'),(163,1,1,'mcp_pm_reports','mcp',145,32,33,'MCP_PM_REPORTS_CLOSED','pm_reports_closed','aclf_m_report'),(164,1,1,'mcp_pm_reports','mcp',145,34,35,'MCP_PM_REPORT_DETAILS','pm_report_details','aclf_m_report'),(165,1,1,'mcp_queue','mcp',144,12,13,'MCP_QUEUE_UNAPPROVED_TOPICS','unapproved_topics','aclf_m_approve'),(166,1,1,'mcp_queue','mcp',144,14,15,'MCP_QUEUE_UNAPPROVED_POSTS','unapproved_posts','aclf_m_approve'),(167,1,1,'mcp_queue','mcp',144,16,17,'MCP_QUEUE_DELETED_TOPICS','deleted_topics','aclf_m_approve'),(168,1,1,'mcp_queue','mcp',144,18,19,'MCP_QUEUE_DELETED_POSTS','deleted_posts','aclf_m_approve'),(169,1,1,'mcp_queue','mcp',144,20,21,'MCP_QUEUE_APPROVE_DETAILS','approve_details','acl_m_approve,$id || (!$id && aclf_m_approve)'),(170,1,1,'mcp_reports','mcp',145,24,25,'MCP_REPORTS_OPEN','reports','aclf_m_report'),(171,1,1,'mcp_reports','mcp',145,26,27,'MCP_REPORTS_CLOSED','reports_closed','aclf_m_report'),(172,1,1,'mcp_reports','mcp',145,28,29,'MCP_REPORT_DETAILS','report_details','acl_m_report,$id || (!$id && aclf_m_report)'),(173,1,1,'mcp_warn','mcp',147,44,45,'MCP_WARN_FRONT','front','aclf_m_warn'),(174,1,1,'mcp_warn','mcp',147,46,47,'MCP_WARN_LIST','list','aclf_m_warn'),(175,1,1,'mcp_warn','mcp',147,48,49,'MCP_WARN_USER','warn_user','aclf_m_warn'),(176,1,1,'mcp_warn','mcp',147,50,51,'MCP_WARN_POST','warn_post','acl_m_warn && acl_f_read,$id'),(177,1,1,'','ucp',0,1,14,'UCP_MAIN','',''),(178,1,1,'','ucp',0,15,28,'UCP_PROFILE','',''),(179,1,1,'','ucp',0,29,38,'UCP_PREFS','',''),(180,1,1,'ucp_pm','ucp',0,39,48,'UCP_PM','',''),(181,1,1,'','ucp',0,49,54,'UCP_USERGROUPS','',''),(182,1,1,'','ucp',0,55,60,'UCP_ZEBRA','',''),(183,1,1,'ucp_attachments','ucp',177,10,11,'UCP_MAIN_ATTACHMENTS','attachments','acl_u_attach'),(184,1,1,'ucp_auth_link','ucp',178,26,27,'UCP_AUTH_LINK_MANAGE','auth_link','authmethod_oauth'),(185,1,1,'ucp_groups','ucp',181,50,51,'UCP_USERGROUPS_MEMBER','membership',''),(186,1,1,'ucp_groups','ucp',181,52,53,'UCP_USERGROUPS_MANAGE','manage',''),(187,1,1,'ucp_main','ucp',177,2,3,'UCP_MAIN_FRONT','front',''),(188,1,1,'ucp_main','ucp',177,4,5,'UCP_MAIN_SUBSCRIBED','subscribed',''),(189,1,1,'ucp_main','ucp',177,6,7,'UCP_MAIN_BOOKMARKS','bookmarks','cfg_allow_bookmarks'),(190,1,1,'ucp_main','ucp',177,8,9,'UCP_MAIN_DRAFTS','drafts',''),(191,1,1,'ucp_notifications','ucp',179,36,37,'UCP_NOTIFICATION_OPTIONS','notification_options',''),(192,1,1,'ucp_notifications','ucp',177,12,13,'UCP_NOTIFICATION_LIST','notification_list',''),(193,1,0,'ucp_pm','ucp',180,40,41,'UCP_PM_VIEW','view','cfg_allow_privmsg'),(194,1,1,'ucp_pm','ucp',180,42,43,'UCP_PM_COMPOSE','compose','cfg_allow_privmsg'),(195,1,1,'ucp_pm','ucp',180,44,45,'UCP_PM_DRAFTS','drafts','cfg_allow_privmsg'),(196,1,1,'ucp_pm','ucp',180,46,47,'UCP_PM_OPTIONS','options','cfg_allow_privmsg'),(197,1,1,'ucp_prefs','ucp',179,30,31,'UCP_PREFS_PERSONAL','personal',''),(198,1,1,'ucp_prefs','ucp',179,32,33,'UCP_PREFS_POST','post',''),(199,1,1,'ucp_prefs','ucp',179,34,35,'UCP_PREFS_VIEW','view',''),(200,1,1,'ucp_profile','ucp',178,16,17,'UCP_PROFILE_PROFILE_INFO','profile_info','acl_u_chgprofileinfo'),(201,1,1,'ucp_profile','ucp',178,18,19,'UCP_PROFILE_SIGNATURE','signature','acl_u_sig'),(202,1,1,'ucp_profile','ucp',178,20,21,'UCP_PROFILE_AVATAR','avatar','cfg_allow_avatar'),(203,1,1,'ucp_profile','ucp',178,22,23,'UCP_PROFILE_REG_DETAILS','reg_details',''),(204,1,1,'ucp_profile','ucp',178,24,25,'UCP_PROFILE_AUTOLOGIN_KEYS','autologin_keys',''),(205,1,1,'ucp_zebra','ucp',182,56,57,'UCP_ZEBRA_FRIENDS','friends',''),(206,1,1,'ucp_zebra','ucp',182,58,59,'UCP_ZEBRA_FOES','foes','');
 /*!40000 ALTER TABLE `phpbb_modules` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_notification_types`
+--
+
+DROP TABLE IF EXISTS `phpbb_notification_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_notification_types` (
+  `notification_type_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `notification_type_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `notification_type_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`notification_type_id`),
+  UNIQUE KEY `type` (`notification_type_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_notification_types`
+--
+
+LOCK TABLES `phpbb_notification_types` WRITE;
+/*!40000 ALTER TABLE `phpbb_notification_types` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phpbb_notification_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_notifications`
+--
+
+DROP TABLE IF EXISTS `phpbb_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_notifications` (
+  `notification_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `notification_type_id` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `item_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `item_parent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `notification_read` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `notification_time` int(11) unsigned NOT NULL DEFAULT '1',
+  `notification_data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`notification_id`),
+  KEY `item_ident` (`notification_type_id`,`item_id`),
+  KEY `user` (`user_id`,`notification_read`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_notifications`
+--
+
+LOCK TABLES `phpbb_notifications` WRITE;
+/*!40000 ALTER TABLE `phpbb_notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phpbb_notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_oauth_accounts`
+--
+
+DROP TABLE IF EXISTS `phpbb_oauth_accounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_oauth_accounts` (
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `provider` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `oauth_provider_id` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`user_id`,`provider`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_oauth_accounts`
+--
+
+LOCK TABLES `phpbb_oauth_accounts` WRITE;
+/*!40000 ALTER TABLE `phpbb_oauth_accounts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phpbb_oauth_accounts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_oauth_tokens`
+--
+
+DROP TABLE IF EXISTS `phpbb_oauth_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_oauth_tokens` (
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `session_id` char(32) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `provider` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `oauth_token` mediumtext COLLATE utf8_bin NOT NULL,
+  KEY `user_id` (`user_id`),
+  KEY `provider` (`provider`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_oauth_tokens`
+--
+
+LOCK TABLES `phpbb_oauth_tokens` WRITE;
+/*!40000 ALTER TABLE `phpbb_oauth_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phpbb_oauth_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -919,7 +1847,6 @@ CREATE TABLE `phpbb_posts` (
   `icon_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `poster_ip` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
   `post_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `post_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `post_reported` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `enable_bbcode` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `enable_smilies` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -938,14 +1865,18 @@ CREATE TABLE `phpbb_posts` (
   `post_edit_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `post_edit_count` smallint(4) unsigned NOT NULL DEFAULT '0',
   `post_edit_locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `post_visibility` tinyint(3) NOT NULL DEFAULT '0',
+  `post_delete_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `post_delete_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_delete_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`post_id`),
   KEY `forum_id` (`forum_id`),
   KEY `topic_id` (`topic_id`),
   KEY `poster_ip` (`poster_ip`),
   KEY `poster_id` (`poster_id`),
-  KEY `post_approved` (`post_approved`),
+  KEY `tid_post_time` (`topic_id`,`post_time`),
   KEY `post_username` (`post_username`),
-  KEY `tid_post_time` (`topic_id`,`post_time`)
+  KEY `post_visibility` (`post_visibility`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -955,7 +1886,7 @@ CREATE TABLE `phpbb_posts` (
 
 LOCK TABLES `phpbb_posts` WRITE;
 /*!40000 ALTER TABLE `phpbb_posts` DISABLE KEYS */;
-INSERT INTO `phpbb_posts` VALUES (1,1,2,2,0,'10.0.2.2',1398381053,1,0,1,1,1,1,'','Welcome to phpBB3','This is an example post in your phpBB3 installation. Everything seems to be working. You may delete this post if you like and continue to set up your board. During the installation process your first category and your first forum are assigned an appropriate set of permissions for the predefined usergroups administrators, bots, global moderators, guests, registered users and registered COPPA users. If you also choose to delete your first category and your first forum, do not forget to assign permissions for all these usergroups for all new categories and forums you create. It is recommended to rename your first category and your first forum and copy permissions from these while creating new categories and forums. Have fun!','5dd683b17f641daf84c040bfefc58ce9',0,'','',1,0,'',0,0,0);
+INSERT INTO `phpbb_posts` VALUES (1,1,2,2,0,'10.0.2.2',1419663576,0,1,1,1,1,'','Welcome to phpBB3','This is an example post in your phpBB3 installation. Everything seems to be working. You may delete this post if you like and continue to set up your board. During the installation process your first category and your first forum are assigned an appropriate set of permissions for the predefined usergroups administrators, bots, global moderators, guests, registered users and registered COPPA users. If you also choose to delete your first category and your first forum, do not forget to assign permissions for all these usergroups for all new categories and forums you create. It is recommended to rename your first category and your first forum and copy permissions from these while creating new categories and forums. Have fun!','5dd683b17f641daf84c040bfefc58ce9',0,'','',1,0,'',0,0,0,1,0,'',0);
 /*!40000 ALTER TABLE `phpbb_posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1106,27 +2037,32 @@ DROP TABLE IF EXISTS `phpbb_profile_fields`;
 CREATE TABLE `phpbb_profile_fields` (
   `field_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `field_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `field_type` tinyint(4) NOT NULL DEFAULT '0',
+  `field_type` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_ident` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_length` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_minlen` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_maxlen` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_novalue` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_default_value` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `field_validation` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `field_validation` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
   `field_required` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `field_show_novalue` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_show_on_reg` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `field_show_on_vt` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `field_show_profile` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_hide` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_no_view` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `field_show_profile` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_show_on_vt` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_show_novalue` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_show_on_pm` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_show_on_ml` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_is_contact` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `field_contact_desc` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `field_contact_url` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`field_id`),
   KEY `fld_type` (`field_type`),
   KEY `fld_ordr` (`field_order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1135,6 +2071,7 @@ CREATE TABLE `phpbb_profile_fields` (
 
 LOCK TABLES `phpbb_profile_fields` WRITE;
 /*!40000 ALTER TABLE `phpbb_profile_fields` DISABLE KEYS */;
+INSERT INTO `phpbb_profile_fields` VALUES (1,'phpbb_location','profilefields.type.string','phpbb_location','20','2','100','','','.*',0,0,0,0,1,1,1,1,0,1,1,0,'',''),(2,'phpbb_website','profilefields.type.url','phpbb_website','40','12','255','','','',0,0,0,0,1,2,1,1,0,1,1,1,'VISIT_WEBSITE','%s'),(3,'phpbb_interests','profilefields.type.text','phpbb_interests','3|30','2','500','','','.*',0,0,0,0,0,3,1,0,0,0,0,0,'',''),(4,'phpbb_occupation','profilefields.type.text','phpbb_occupation','3|30','2','500','','','.*',0,0,0,0,0,4,1,0,0,0,0,0,'',''),(5,'phpbb_aol','profilefields.type.string','phpbb_aol','40','5','255','','','.*',0,0,0,0,0,5,1,1,0,1,1,1,'',''),(6,'phpbb_icq','profilefields.type.string','phpbb_icq','20','3','15','','','[0-9]+',0,0,0,0,0,6,1,1,0,1,1,1,'SEND_ICQ_MESSAGE','https://www.icq.com/people/%s/'),(7,'phpbb_wlm','profilefields.type.string','phpbb_wlm','40','5','255','','','.*',0,0,0,0,0,7,1,1,0,1,1,1,'',''),(8,'phpbb_yahoo','profilefields.type.string','phpbb_yahoo','40','5','255','','','.*',0,0,0,0,0,8,1,1,0,1,1,1,'SEND_YIM_MESSAGE','http://edit.yahoo.com/config/send_webmesg?.target=%s&amp;.src=pg'),(9,'phpbb_facebook','profilefields.type.string','phpbb_facebook','20','5','50','','','[\\w.]+',0,0,0,0,1,9,1,1,0,1,1,1,'VIEW_FACEBOOK_PROFILE','http://facebook.com/%s/'),(10,'phpbb_twitter','profilefields.type.string','phpbb_twitter','20','1','15','','','[\\w_]+',0,0,0,0,1,10,1,1,0,1,1,1,'VIEW_TWITTER_PROFILE','http://twitter.com/%s'),(11,'phpbb_skype','profilefields.type.string','phpbb_skype','20','6','32','','','[a-zA-Z][\\w\\.,\\-_]+',0,0,0,0,1,11,1,1,0,1,1,1,'VIEW_SKYPE_PROFILE','skype:%s?userinfo'),(12,'phpbb_youtube','profilefields.type.string','phpbb_youtube','20','3','60','','','[a-zA-Z][\\w\\.,\\-_]+',0,0,0,0,1,12,1,1,0,1,1,1,'VIEW_YOUTUBE_CHANNEL','http://youtube.com/user/%s'),(13,'phpbb_googleplus','profilefields.type.googleplus','phpbb_googleplus','20','3','255','','','[\\w]+',0,0,0,0,1,13,1,1,0,1,1,1,'VIEW_GOOGLEPLUS_PROFILE','http://plus.google.com/%s');
 /*!40000 ALTER TABLE `phpbb_profile_fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1147,6 +2084,19 @@ DROP TABLE IF EXISTS `phpbb_profile_fields_data`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_profile_fields_data` (
   `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `pf_phpbb_interests` mediumtext COLLATE utf8_bin NOT NULL,
+  `pf_phpbb_occupation` mediumtext COLLATE utf8_bin NOT NULL,
+  `pf_phpbb_facebook` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_twitter` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_location` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_youtube` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_googleplus` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_icq` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_skype` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_website` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_wlm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_yahoo` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pf_phpbb_aol` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1171,7 +2121,7 @@ CREATE TABLE `phpbb_profile_fields_lang` (
   `field_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `lang_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `option_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `field_type` tinyint(4) NOT NULL DEFAULT '0',
+  `field_type` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
   `lang_value` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`field_id`,`lang_id`,`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -1209,6 +2159,7 @@ CREATE TABLE `phpbb_profile_lang` (
 
 LOCK TABLES `phpbb_profile_lang` WRITE;
 /*!40000 ALTER TABLE `phpbb_profile_lang` DISABLE KEYS */;
+INSERT INTO `phpbb_profile_lang` VALUES (1,1,'LOCATION','',''),(2,1,'WEBSITE','',''),(3,1,'INTERESTS','',''),(4,1,'OCCUPATION','',''),(5,1,'AOL','',''),(6,1,'ICQ','',''),(7,1,'WLM','',''),(8,1,'YAHOO','',''),(9,1,'FACEBOOK','',''),(10,1,'TWITTER','',''),(11,1,'SKYPE','',''),(12,1,'YOUTUBE','',''),(13,1,'GOOGLEPLUS','','');
 /*!40000 ALTER TABLE `phpbb_profile_lang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1220,7 +2171,7 @@ DROP TABLE IF EXISTS `phpbb_ranks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_ranks` (
-  `rank_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `rank_id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `rank_title` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `rank_min` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `rank_special` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -1250,12 +2201,18 @@ CREATE TABLE `phpbb_reports` (
   `report_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `reason_id` smallint(4) unsigned NOT NULL DEFAULT '0',
   `post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `pm_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `user_notify` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `report_closed` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `report_time` int(11) unsigned NOT NULL DEFAULT '0',
   `report_text` mediumtext COLLATE utf8_bin NOT NULL,
+  `pm_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `reported_post_enable_bbcode` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `reported_post_enable_smilies` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `reported_post_enable_magic_url` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `reported_post_text` mediumtext COLLATE utf8_bin NOT NULL,
+  `reported_post_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `reported_post_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`report_id`),
   KEY `post_id` (`post_id`),
   KEY `pm_id` (`pm_id`)
@@ -1361,7 +2318,7 @@ CREATE TABLE `phpbb_search_wordmatch` (
   `post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `word_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title_match` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  UNIQUE KEY `unq_mtch` (`word_id`,`post_id`,`title_match`),
+  UNIQUE KEY `un_mtch` (`word_id`,`post_id`,`title_match`),
   KEY `word_id` (`word_id`),
   KEY `post_id` (`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -1387,7 +2344,6 @@ DROP TABLE IF EXISTS `phpbb_sessions`;
 CREATE TABLE `phpbb_sessions` (
   `session_id` char(32) COLLATE utf8_bin NOT NULL DEFAULT '',
   `session_user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `session_forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `session_last_visit` int(11) unsigned NOT NULL DEFAULT '0',
   `session_start` int(11) unsigned NOT NULL DEFAULT '0',
   `session_time` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1398,6 +2354,7 @@ CREATE TABLE `phpbb_sessions` (
   `session_viewonline` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `session_autologin` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `session_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `session_forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`session_id`),
   KEY `session_time` (`session_time`),
   KEY `session_user_id` (`session_user_id`),
@@ -1411,7 +2368,7 @@ CREATE TABLE `phpbb_sessions` (
 
 LOCK TABLES `phpbb_sessions` WRITE;
 /*!40000 ALTER TABLE `phpbb_sessions` DISABLE KEYS */;
-INSERT INTO `phpbb_sessions` VALUES ('119c6c19b73d5c66a6dbf1eaf1ad9751',2,0,1398381059,1398381059,1398382135,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/33.0.1750.152 Chrome/33.0.1750.152 Safari/537.36','','adm/index.php?i=styles&mode=style&action=deactivate&id=1&confirm_key=WTRDTYQIRR',1,0,1),('3325db87ca75298cd3578fa995c4d7fa',2,0,1398399811,1398399811,1398400422,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/33.0.1750.152 Chrome/33.0.1750.152 Safari/537.36','','../army/index.php',1,0,1),('4495360b78a6e3e622f9aa48d5eeda39',2,0,1398382474,1398382474,1398382717,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/33.0.1750.152 Chrome/33.0.1750.152 Safari/537.36','','../home/index.php',1,0,0),('47d77f88b128e0e3bfbcf2ccfe242e59',2,0,1398422619,1398422619,1398424646,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/33.0.1750.152 Chrome/33.0.1750.152 Safari/537.36','','../campaign/index.php',1,0,0),('90bfc65eb2393dafe3c471199c1b05bd',1,0,1398381059,1398381059,1398381059,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/33.0.1750.152 Chrome/33.0.1750.152 Safari/537.36','','install/index.php?mode=install&sub=final',1,0,0),('fa600fee8680486a6ca8210dd0d54854',2,0,1398979357,1398979357,1398983974,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36','','adm/index.php?i=styles&mode=style',1,0,1);
+INSERT INTO `phpbb_sessions` VALUES ('16a361ca736fe92d5c16756e1f6cedaf',1,1419663583,1419663583,1419663583,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36','','install/index.php?mode=install&sub=final',1,0,0,0),('a8bd2bbcfee52636392bac7564db2c1b',2,1419663829,1419663851,1419663852,'10.0.2.2','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36','','index.php',1,0,0,0);
 /*!40000 ALTER TABLE `phpbb_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1509,15 +2466,13 @@ CREATE TABLE `phpbb_styles` (
   `style_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `style_copyright` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `style_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `template_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `theme_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `imageset_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `style_path` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'kNg=',
+  `style_parent_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `style_parent_tree` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`style_id`),
-  UNIQUE KEY `style_name` (`style_name`),
-  KEY `template_id` (`template_id`),
-  KEY `theme_id` (`theme_id`),
-  KEY `imageset_id` (`imageset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `style_name` (`style_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1526,7 +2481,7 @@ CREATE TABLE `phpbb_styles` (
 
 LOCK TABLES `phpbb_styles` WRITE;
 /*!40000 ALTER TABLE `phpbb_styles` DISABLE KEYS */;
-INSERT INTO `phpbb_styles` VALUES (2,'GCstyle','© 2013 global-conflict.org',1,2,2,2);
+INSERT INTO `phpbb_styles` VALUES (1,'prosilver','&copy; phpBB Limited',1,'prosilver','kNg=',0,'');
 /*!40000 ALTER TABLE `phpbb_styles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1538,13 +2493,13 @@ DROP TABLE IF EXISTS `phpbb_styles_imageset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_styles_imageset` (
-  `imageset_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `imageset_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `imageset_copyright` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `imageset_path` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `imageset_id` int(11) NOT NULL,
+  `imageset_name` varchar(255) NOT NULL,
+  `imageset_copyright` varchar(255) NOT NULL,
+  `imageset_path` varchar(100) NOT NULL,
   PRIMARY KEY (`imageset_id`),
-  UNIQUE KEY `imgset_nm` (`imageset_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `imageset_name` (`imageset_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1553,7 +2508,6 @@ CREATE TABLE `phpbb_styles_imageset` (
 
 LOCK TABLES `phpbb_styles_imageset` WRITE;
 /*!40000 ALTER TABLE `phpbb_styles_imageset` DISABLE KEYS */;
-INSERT INTO `phpbb_styles_imageset` VALUES (2,'GCstyle','&copy; 2013 global-conflict.org','GCstyle');
 /*!40000 ALTER TABLE `phpbb_styles_imageset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1565,16 +2519,15 @@ DROP TABLE IF EXISTS `phpbb_styles_imageset_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_styles_imageset_data` (
-  `image_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `image_name` varchar(200) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `image_filename` varchar(200) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `image_lang` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `image_height` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `image_width` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `imageset_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`image_id`),
-  KEY `i_d` (`imageset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `image_id` int(11) NOT NULL,
+  `image_name` varchar(200) NOT NULL,
+  `image_filename` varchar(200) NOT NULL,
+  `image_lang` varchar(30) NOT NULL,
+  `image_height` int(11) NOT NULL,
+  `image_width` int(11) NOT NULL,
+  `imageset_id` int(11) NOT NULL,
+  PRIMARY KEY (`image_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1583,7 +2536,6 @@ CREATE TABLE `phpbb_styles_imageset_data` (
 
 LOCK TABLES `phpbb_styles_imageset_data` WRITE;
 /*!40000 ALTER TABLE `phpbb_styles_imageset_data` DISABLE KEYS */;
-INSERT INTO `phpbb_styles_imageset_data` VALUES (79,'site_logo','gc_logo.png','',86,230,2),(80,'upload_bar','upload_bar.gif','',16,280,2),(81,'poll_left','poll_left.gif','',12,4,2),(82,'poll_center','poll_center.gif','',12,1,2),(83,'poll_right','poll_right.gif','',12,4,2),(84,'forum_link','forum_link.gif','',25,46,2),(85,'forum_read','forum_read.gif','',25,46,2),(86,'forum_read_locked','forum_read_locked.gif','',25,46,2),(87,'forum_read_subforum','forum_read_subforum.gif','',25,46,2),(88,'forum_unread','forum_unread.gif','',25,46,2),(89,'forum_unread_locked','forum_unread_locked.gif','',25,46,2),(90,'forum_unread_subforum','forum_unread_subforum.gif','',25,46,2),(91,'topic_moved','topic_moved.gif','',18,19,2),(92,'topic_read','topic_read.gif','',18,19,2),(93,'topic_read_mine','topic_read_mine.gif','',18,19,2),(94,'topic_read_hot','topic_read_hot.gif','',18,19,2),(95,'topic_read_hot_mine','topic_read_hot_mine.gif','',18,19,2),(96,'topic_read_locked','topic_read_locked.gif','',18,19,2),(97,'topic_read_locked_mine','topic_read_locked_mine.gif','',18,19,2),(98,'topic_unread','topic_unread.gif','',18,19,2),(99,'topic_unread_mine','topic_unread_mine.gif','',18,19,2),(100,'topic_unread_hot','topic_unread_hot.gif','',18,19,2),(101,'topic_unread_hot_mine','topic_unread_hot_mine.gif','',18,19,2),(102,'topic_unread_locked','topic_unread_locked.gif','',18,19,2),(103,'topic_unread_locked_mine','topic_unread_locked_mine.gif','',18,19,2),(104,'sticky_read','sticky_read.gif','',18,19,2),(105,'sticky_read_mine','sticky_read_mine.gif','',18,19,2),(106,'sticky_read_locked','sticky_read_locked.gif','',18,19,2),(107,'sticky_read_locked_mine','sticky_read_locked_mine.gif','',18,19,2),(108,'sticky_unread','sticky_unread.gif','',18,19,2),(109,'sticky_unread_mine','sticky_unread_mine.gif','',18,19,2),(110,'sticky_unread_locked','sticky_unread_locked.gif','',18,19,2),(111,'sticky_unread_locked_mine','sticky_unread_locked_mine.gif','',18,19,2),(112,'announce_read','announce_read.gif','',18,19,2),(113,'announce_read_mine','announce_read_mine.gif','',18,19,2),(114,'announce_read_locked','announce_read_locked.gif','',18,19,2),(115,'announce_read_locked_mine','announce_read_locked_mine.gif','',18,19,2),(116,'announce_unread','announce_unread.gif','',18,19,2),(117,'announce_unread_mine','announce_unread_mine.gif','',18,19,2),(118,'announce_unread_locked','announce_unread_locked.gif','',18,19,2),(119,'announce_unread_locked_mine','announce_unread_locked_mine.gif','',18,19,2),(120,'global_read','announce_read.gif','',18,19,2),(121,'global_read_mine','announce_read_mine.gif','',18,19,2),(122,'global_read_locked','announce_read_locked.gif','',18,19,2),(123,'global_read_locked_mine','announce_read_locked_mine.gif','',18,19,2),(124,'global_unread','announce_unread.gif','',18,19,2),(125,'global_unread_mine','announce_unread_mine.gif','',18,19,2),(126,'global_unread_locked','announce_unread_locked.gif','',18,19,2),(127,'global_unread_locked_mine','announce_unread_locked_mine.gif','',18,19,2),(128,'pm_read','topic_read.gif','',18,19,2),(129,'pm_unread','topic_unread.gif','',18,19,2),(130,'icon_post_target','icon_post_target.gif','',9,12,2),(131,'icon_post_target_unread','icon_post_target_unread.gif','',9,12,2),(132,'icon_topic_attach','icon_topic_attach.gif','',18,14,2),(133,'icon_topic_latest','icon_topic_latest.gif','',9,18,2),(134,'icon_topic_newest','icon_topic_newest.gif','',9,18,2),(135,'icon_topic_reported','icon_topic_reported.gif','',18,19,2),(136,'icon_topic_unapproved','icon_topic_unapproved.gif','',18,19,2);
 /*!40000 ALTER TABLE `phpbb_styles_imageset_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1595,17 +2547,17 @@ DROP TABLE IF EXISTS `phpbb_styles_template`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_styles_template` (
-  `template_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `template_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `template_copyright` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `template_path` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'kNg=',
-  `template_storedb` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `template_inherits_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `template_inherit_path` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `template_id` int(11) NOT NULL,
+  `template_name` varchar(255) NOT NULL,
+  `template_copyright` varchar(255) NOT NULL,
+  `template_path` varchar(100) NOT NULL,
+  `bbcode_bitfield` varchar(255) NOT NULL,
+  `template_storedb` smallint(5) unsigned NOT NULL,
+  `template_inherits_id` int(11) NOT NULL,
+  `template_inherit_path` varchar(255) NOT NULL,
   PRIMARY KEY (`template_id`),
-  UNIQUE KEY `tmplte_nm` (`template_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `template_name` (`template_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1614,7 +2566,6 @@ CREATE TABLE `phpbb_styles_template` (
 
 LOCK TABLES `phpbb_styles_template` WRITE;
 /*!40000 ALTER TABLE `phpbb_styles_template` DISABLE KEYS */;
-INSERT INTO `phpbb_styles_template` VALUES (2,'GCstyle','&copy; 2013 global-conflict.org','GCstyle','+Ng=',0,0,'');
 /*!40000 ALTER TABLE `phpbb_styles_template` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1626,14 +2577,13 @@ DROP TABLE IF EXISTS `phpbb_styles_template_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_styles_template_data` (
-  `template_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `template_filename` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `template_included` text COLLATE utf8_bin NOT NULL,
-  `template_mtime` int(11) unsigned NOT NULL DEFAULT '0',
-  `template_data` mediumtext COLLATE utf8_bin NOT NULL,
-  KEY `tid` (`template_id`),
-  KEY `tfn` (`template_filename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `template_id` int(11) NOT NULL,
+  `template_filename` varchar(100) NOT NULL,
+  `template_included` longtext NOT NULL,
+  `template_mtime` int(10) unsigned NOT NULL,
+  `template_data` longtext NOT NULL,
+  PRIMARY KEY (`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1653,16 +2603,16 @@ DROP TABLE IF EXISTS `phpbb_styles_theme`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_styles_theme` (
-  `theme_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `theme_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `theme_copyright` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `theme_path` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `theme_storedb` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `theme_mtime` int(11) unsigned NOT NULL DEFAULT '0',
-  `theme_data` mediumtext COLLATE utf8_bin NOT NULL,
+  `theme_id` int(11) NOT NULL,
+  `theme_name` varchar(255) NOT NULL,
+  `theme_copyright` varchar(255) NOT NULL,
+  `theme_path` varchar(100) NOT NULL,
+  `theme_storedb` smallint(5) unsigned NOT NULL,
+  `theme_mtime` int(10) unsigned NOT NULL,
+  `theme_data` longtext NOT NULL,
   PRIMARY KEY (`theme_id`),
   UNIQUE KEY `theme_name` (`theme_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1671,8 +2621,34 @@ CREATE TABLE `phpbb_styles_theme` (
 
 LOCK TABLES `phpbb_styles_theme` WRITE;
 /*!40000 ALTER TABLE `phpbb_styles_theme` DISABLE KEYS */;
-INSERT INTO `phpbb_styles_theme` VALUES (2,'GCstyle','&copy; 2013 global-conflict.org','GCstyle',0,1398381565,'');
 /*!40000 ALTER TABLE `phpbb_styles_theme` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phpbb_teampage`
+--
+
+DROP TABLE IF EXISTS `phpbb_teampage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_teampage` (
+  `teampage_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `teampage_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `teampage_position` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `teampage_parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`teampage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_teampage`
+--
+
+LOCK TABLES `phpbb_teampage` WRITE;
+/*!40000 ALTER TABLE `phpbb_teampage` DISABLE KEYS */;
+INSERT INTO `phpbb_teampage` VALUES (1,5,'',1,0),(2,4,'',2,0);
+/*!40000 ALTER TABLE `phpbb_teampage` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1683,23 +2659,20 @@ DROP TABLE IF EXISTS `phpbb_topics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_topics` (
-  `topic_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `topic_id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `icon_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `topic_attachment` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `topic_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `topic_reported` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `topic_title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `topic_poster` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `topic_time` int(11) unsigned NOT NULL DEFAULT '0',
   `topic_time_limit` int(11) unsigned NOT NULL DEFAULT '0',
   `topic_views` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `topic_replies` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `topic_replies_real` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `topic_status` tinyint(3) NOT NULL DEFAULT '0',
   `topic_type` tinyint(3) NOT NULL DEFAULT '0',
   `topic_first_post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `topic_first_poster_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_first_poster_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `topic_first_poster_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
   `topic_last_post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `topic_last_poster_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1717,13 +2690,20 @@ CREATE TABLE `phpbb_topics` (
   `poll_max_options` tinyint(4) NOT NULL DEFAULT '1',
   `poll_last_vote` int(11) unsigned NOT NULL DEFAULT '0',
   `poll_vote_change` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `topic_visibility` tinyint(3) NOT NULL DEFAULT '0',
+  `topic_delete_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_delete_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_delete_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_approved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_unapproved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_softdeleted` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`topic_id`),
   KEY `forum_id` (`forum_id`),
   KEY `forum_id_type` (`forum_id`,`topic_type`),
   KEY `last_post_time` (`topic_last_post_time`),
-  KEY `topic_approved` (`topic_approved`),
-  KEY `forum_appr_last` (`forum_id`,`topic_approved`,`topic_last_post_id`),
-  KEY `fid_time_moved` (`forum_id`,`topic_last_post_time`,`topic_moved_id`)
+  KEY `fid_time_moved` (`forum_id`,`topic_last_post_time`,`topic_moved_id`),
+  KEY `topic_visibility` (`topic_visibility`),
+  KEY `forum_vis_last` (`forum_id`,`topic_visibility`,`topic_last_post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1733,7 +2713,7 @@ CREATE TABLE `phpbb_topics` (
 
 LOCK TABLES `phpbb_topics` WRITE;
 /*!40000 ALTER TABLE `phpbb_topics` DISABLE KEYS */;
-INSERT INTO `phpbb_topics` VALUES (1,2,0,0,1,0,'Welcome to phpBB3',2,1398381053,0,0,0,0,0,0,1,'admin','AA0000',1,2,'admin','AA0000','Welcome to phpBB3',1398381053,972086460,0,0,0,'',0,0,1,0,0);
+INSERT INTO `phpbb_topics` VALUES (1,2,0,0,0,'Welcome to phpBB3',2,1419663576,0,0,0,0,1,'admin','AA0000',1,2,'admin','AA0000','Welcome to phpBB3',1419663576,972086460,0,0,0,'',0,0,1,0,0,1,0,'',0,1,0,0);
 /*!40000 ALTER TABLE `phpbb_topics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1775,8 +2755,8 @@ CREATE TABLE `phpbb_topics_track` (
   `forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `mark_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`topic_id`),
-  KEY `topic_id` (`topic_id`),
-  KEY `forum_id` (`forum_id`)
+  KEY `forum_id` (`forum_id`),
+  KEY `topic_id` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1844,6 +2824,32 @@ INSERT INTO `phpbb_user_group` VALUES (1,1,0,0),(2,2,0,0),(4,2,0,0),(5,2,1,0),(6
 UNLOCK TABLES;
 
 --
+-- Table structure for table `phpbb_user_notifications`
+--
+
+DROP TABLE IF EXISTS `phpbb_user_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `phpbb_user_notifications` (
+  `item_type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `item_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `method` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `notify` tinyint(1) unsigned NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phpbb_user_notifications`
+--
+
+LOCK TABLES `phpbb_user_notifications` WRITE;
+/*!40000 ALTER TABLE `phpbb_user_notifications` DISABLE KEYS */;
+INSERT INTO `phpbb_user_notifications` VALUES ('notification.type.post',0,2,'',1),('notification.type.post',0,2,'notification.method.email',1),('notification.type.topic',0,2,'',1),('notification.type.topic',0,2,'notification.method.email',1),('notification.type.post',0,3,'',1),('notification.type.post',0,3,'notification.method.email',1),('notification.type.topic',0,3,'',1),('notification.type.topic',0,3,'notification.method.email',1),('notification.type.post',0,4,'',1),('notification.type.post',0,4,'notification.method.email',1),('notification.type.topic',0,4,'',1),('notification.type.topic',0,4,'notification.method.email',1),('notification.type.post',0,5,'',1),('notification.type.post',0,5,'notification.method.email',1),('notification.type.topic',0,5,'',1),('notification.type.topic',0,5,'notification.method.email',1),('notification.type.post',0,6,'',1),('notification.type.post',0,6,'notification.method.email',1),('notification.type.topic',0,6,'',1),('notification.type.topic',0,6,'notification.method.email',1),('notification.type.post',0,7,'',1),('notification.type.post',0,7,'notification.method.email',1),('notification.type.topic',0,7,'',1),('notification.type.topic',0,7,'notification.method.email',1),('notification.type.post',0,8,'',1),('notification.type.post',0,8,'notification.method.email',1),('notification.type.topic',0,8,'',1),('notification.type.topic',0,8,'notification.method.email',1),('notification.type.post',0,9,'',1),('notification.type.post',0,9,'notification.method.email',1),('notification.type.topic',0,9,'',1),('notification.type.topic',0,9,'notification.method.email',1),('notification.type.post',0,10,'',1),('notification.type.post',0,10,'notification.method.email',1),('notification.type.topic',0,10,'',1),('notification.type.topic',0,10,'notification.method.email',1),('notification.type.post',0,11,'',1),('notification.type.post',0,11,'notification.method.email',1),('notification.type.topic',0,11,'',1),('notification.type.topic',0,11,'notification.method.email',1),('notification.type.post',0,12,'',1),('notification.type.post',0,12,'notification.method.email',1),('notification.type.topic',0,12,'',1),('notification.type.topic',0,12,'notification.method.email',1),('notification.type.post',0,13,'',1),('notification.type.post',0,13,'notification.method.email',1),('notification.type.topic',0,13,'',1),('notification.type.topic',0,13,'notification.method.email',1),('notification.type.post',0,14,'',1),('notification.type.post',0,14,'notification.method.email',1),('notification.type.topic',0,14,'',1),('notification.type.topic',0,14,'notification.method.email',1),('notification.type.post',0,15,'',1),('notification.type.post',0,15,'notification.method.email',1),('notification.type.topic',0,15,'',1),('notification.type.topic',0,15,'notification.method.email',1),('notification.type.post',0,16,'',1),('notification.type.post',0,16,'notification.method.email',1),('notification.type.topic',0,16,'',1),('notification.type.topic',0,16,'notification.method.email',1),('notification.type.post',0,17,'',1),('notification.type.post',0,17,'notification.method.email',1),('notification.type.topic',0,17,'',1),('notification.type.topic',0,17,'notification.method.email',1),('notification.type.post',0,18,'',1),('notification.type.post',0,18,'notification.method.email',1),('notification.type.topic',0,18,'',1),('notification.type.topic',0,18,'notification.method.email',1),('notification.type.post',0,19,'',1),('notification.type.post',0,19,'notification.method.email',1),('notification.type.topic',0,19,'',1),('notification.type.topic',0,19,'notification.method.email',1),('notification.type.post',0,20,'',1),('notification.type.post',0,20,'notification.method.email',1),('notification.type.topic',0,20,'',1),('notification.type.topic',0,20,'notification.method.email',1),('notification.type.post',0,21,'',1),('notification.type.post',0,21,'notification.method.email',1),('notification.type.topic',0,21,'',1),('notification.type.topic',0,21,'notification.method.email',1),('notification.type.post',0,22,'',1),('notification.type.post',0,22,'notification.method.email',1),('notification.type.topic',0,22,'',1),('notification.type.topic',0,22,'notification.method.email',1),('notification.type.post',0,23,'',1),('notification.type.post',0,23,'notification.method.email',1),('notification.type.topic',0,23,'',1),('notification.type.topic',0,23,'notification.method.email',1),('notification.type.post',0,24,'',1),('notification.type.post',0,24,'notification.method.email',1),('notification.type.topic',0,24,'',1),('notification.type.topic',0,24,'notification.method.email',1),('notification.type.post',0,25,'',1),('notification.type.post',0,25,'notification.method.email',1),('notification.type.topic',0,25,'',1),('notification.type.topic',0,25,'notification.method.email',1),('notification.type.post',0,26,'',1),('notification.type.post',0,26,'notification.method.email',1),('notification.type.topic',0,26,'',1),('notification.type.topic',0,26,'notification.method.email',1),('notification.type.post',0,27,'',1),('notification.type.post',0,27,'notification.method.email',1),('notification.type.topic',0,27,'',1),('notification.type.topic',0,27,'notification.method.email',1),('notification.type.post',0,28,'',1),('notification.type.post',0,28,'notification.method.email',1),('notification.type.topic',0,28,'',1),('notification.type.topic',0,28,'notification.method.email',1),('notification.type.post',0,29,'',1),('notification.type.post',0,29,'notification.method.email',1),('notification.type.topic',0,29,'',1),('notification.type.topic',0,29,'notification.method.email',1),('notification.type.post',0,30,'',1),('notification.type.post',0,30,'notification.method.email',1),('notification.type.topic',0,30,'',1),('notification.type.topic',0,30,'notification.method.email',1),('notification.type.post',0,31,'',1),('notification.type.post',0,31,'notification.method.email',1),('notification.type.topic',0,31,'',1),('notification.type.topic',0,31,'notification.method.email',1),('notification.type.post',0,32,'',1),('notification.type.post',0,32,'notification.method.email',1),('notification.type.topic',0,32,'',1),('notification.type.topic',0,32,'notification.method.email',1),('notification.type.post',0,33,'',1),('notification.type.post',0,33,'notification.method.email',1),('notification.type.topic',0,33,'',1),('notification.type.topic',0,33,'notification.method.email',1),('notification.type.post',0,34,'',1),('notification.type.post',0,34,'notification.method.email',1),('notification.type.topic',0,34,'',1),('notification.type.topic',0,34,'notification.method.email',1),('notification.type.post',0,35,'',1),('notification.type.post',0,35,'notification.method.email',1),('notification.type.topic',0,35,'',1),('notification.type.topic',0,35,'notification.method.email',1),('notification.type.post',0,36,'',1),('notification.type.post',0,36,'notification.method.email',1),('notification.type.topic',0,36,'',1),('notification.type.topic',0,36,'notification.method.email',1),('notification.type.post',0,37,'',1),('notification.type.post',0,37,'notification.method.email',1),('notification.type.topic',0,37,'',1),('notification.type.topic',0,37,'notification.method.email',1),('notification.type.post',0,38,'',1),('notification.type.post',0,38,'notification.method.email',1),('notification.type.topic',0,38,'',1),('notification.type.topic',0,38,'notification.method.email',1),('notification.type.post',0,39,'',1),('notification.type.post',0,39,'notification.method.email',1),('notification.type.topic',0,39,'',1),('notification.type.topic',0,39,'notification.method.email',1),('notification.type.post',0,40,'',1),('notification.type.post',0,40,'notification.method.email',1),('notification.type.topic',0,40,'',1),('notification.type.topic',0,40,'notification.method.email',1),('notification.type.post',0,41,'',1),('notification.type.post',0,41,'notification.method.email',1),('notification.type.topic',0,41,'',1),('notification.type.topic',0,41,'notification.method.email',1),('notification.type.post',0,42,'',1),('notification.type.post',0,42,'notification.method.email',1),('notification.type.topic',0,42,'',1),('notification.type.topic',0,42,'notification.method.email',1),('notification.type.post',0,43,'',1),('notification.type.post',0,43,'notification.method.email',1),('notification.type.topic',0,43,'',1),('notification.type.topic',0,43,'notification.method.email',1),('notification.type.post',0,44,'',1),('notification.type.post',0,44,'notification.method.email',1),('notification.type.topic',0,44,'',1),('notification.type.topic',0,44,'notification.method.email',1),('notification.type.post',0,45,'',1),('notification.type.post',0,45,'notification.method.email',1),('notification.type.topic',0,45,'',1),('notification.type.topic',0,45,'notification.method.email',1),('notification.type.post',0,46,'',1),('notification.type.post',0,46,'notification.method.email',1),('notification.type.topic',0,46,'',1),('notification.type.topic',0,46,'notification.method.email',1),('notification.type.post',0,47,'',1),('notification.type.post',0,47,'notification.method.email',1),('notification.type.topic',0,47,'',1),('notification.type.topic',0,47,'notification.method.email',1);
+/*!40000 ALTER TABLE `phpbb_user_notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `phpbb_users`
 --
 
@@ -1851,7 +2857,7 @@ DROP TABLE IF EXISTS `phpbb_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phpbb_users` (
-  `user_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `user_type` tinyint(2) NOT NULL DEFAULT '0',
   `group_id` mediumint(8) unsigned NOT NULL DEFAULT '3',
   `user_permissions` mediumtext COLLATE utf8_bin NOT NULL,
@@ -1860,9 +2866,8 @@ CREATE TABLE `phpbb_users` (
   `user_regdate` int(11) unsigned NOT NULL DEFAULT '0',
   `username` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `username_clean` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_password` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_password` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_passchg` int(11) unsigned NOT NULL DEFAULT '0',
-  `user_pass_convert` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `user_email` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_email_hash` bigint(20) NOT NULL DEFAULT '0',
   `user_birthday` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -1879,8 +2884,7 @@ CREATE TABLE `phpbb_users` (
   `user_inactive_time` int(11) unsigned NOT NULL DEFAULT '0',
   `user_posts` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `user_lang` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_timezone` decimal(5,2) NOT NULL DEFAULT '0.00',
-  `user_dst` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `user_timezone` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_dateformat` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT 'd M Y H:i',
   `user_style` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `user_rank` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1906,23 +2910,15 @@ CREATE TABLE `phpbb_users` (
   `user_allow_massemail` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `user_options` int(11) unsigned NOT NULL DEFAULT '230271',
   `user_avatar` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_avatar_type` tinyint(2) NOT NULL DEFAULT '0',
+  `user_avatar_type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_avatar_width` smallint(4) unsigned NOT NULL DEFAULT '0',
   `user_avatar_height` smallint(4) unsigned NOT NULL DEFAULT '0',
   `user_sig` mediumtext COLLATE utf8_bin NOT NULL,
   `user_sig_bbcode_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_sig_bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_from` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_icq` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_aim` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_yim` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_msnm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_jabber` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_website` varchar(200) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_occ` text COLLATE utf8_bin NOT NULL,
-  `user_interests` text COLLATE utf8_bin NOT NULL,
   `user_actkey` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_newpasswd` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_newpasswd` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_form_salt` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_new` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `user_reminded` tinyint(4) NOT NULL DEFAULT '0',
@@ -1941,7 +2937,7 @@ CREATE TABLE `phpbb_users` (
 
 LOCK TABLES `phpbb_users` WRITE;
 /*!40000 ALTER TABLE `phpbb_users` DISABLE KEYS */;
-INSERT INTO `phpbb_users` VALUES (1,2,1,'00000000003khra3nk\ni1cjyo000000\ni1cjyo000000',0,'',1398381053,'Anonymous','anonymous','',0,0,'',0,'',0,0,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'d M Y H:i',2,0,'',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,1,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','17549df20ca0d2a8',1,0,0),(2,3,5,'zik0zjzik0zjzik0xs\ni1cjyo000000\nzik0zjzhb2tc',0,'10.0.2.2',1398381053,'admin','admin','$H$9E0QdK9qP3EOreOFZ3I5fLNMG37KvH1',0,0,'admin@example.com',143317126117,'',0,0,0,'','',0,0,0,0,0,0,1,'en',0.00,0,'D M d, Y g:i a',2,1,'AA0000',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,1,1,1,1,230271,'',0,0,0,'','','','','','','','','','','','','','','fe7011ba625cca58',1,0,0),(3,2,6,'',0,'',1398381058,'AdsBot [Google]','adsbot [google]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','2993210c7a1ef8c5',0,0,0),(4,2,6,'',0,'',1398381058,'Alexa [Bot]','alexa [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','2cecb94928647cce',0,0,0),(5,2,6,'',0,'',1398381058,'Alta Vista [Bot]','alta vista [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','a22f9526d2b09ea9',0,0,0),(6,2,6,'',0,'',1398381058,'Ask Jeeves [Bot]','ask jeeves [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','1c3d88858266944f',0,0,0),(7,2,6,'',0,'',1398381058,'Baidu [Spider]','baidu [spider]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','6d55f416c87e0597',0,0,0),(8,2,6,'',0,'',1398381058,'Bing [Bot]','bing [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','de49aa103bc03105',0,0,0),(9,2,6,'',0,'',1398381058,'Exabot [Bot]','exabot [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','5060273ba4f6839a',0,0,0),(10,2,6,'',0,'',1398381058,'FAST Enterprise [Crawler]','fast enterprise [crawler]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','95654d1c0a910159',0,0,0),(11,2,6,'',0,'',1398381058,'FAST WebCrawler [Crawler]','fast webcrawler [crawler]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','32713a4c84df5021',0,0,0),(12,2,6,'',0,'',1398381058,'Francis [Bot]','francis [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','4b75d0e991d0fb75',0,0,0),(13,2,6,'',0,'',1398381058,'Gigabot [Bot]','gigabot [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','e62128ba4159ef90',0,0,0),(14,2,6,'',0,'',1398381058,'Google Adsense [Bot]','google adsense [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','4e6ec62271eec182',0,0,0),(15,2,6,'',0,'',1398381058,'Google Desktop','google desktop','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','1786d5c3834f6b86',0,0,0),(16,2,6,'',0,'',1398381058,'Google Feedfetcher','google feedfetcher','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','c645fb107e749cc7',0,0,0),(17,2,6,'',0,'',1398381058,'Google [Bot]','google [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','781ba641dddb2b52',0,0,0),(18,2,6,'',0,'',1398381058,'Heise IT-Markt [Crawler]','heise it-markt [crawler]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','eb0e53d794efb23f',0,0,0),(19,2,6,'',0,'',1398381058,'Heritrix [Crawler]','heritrix [crawler]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','2428e5a3c3273cee',0,0,0),(20,2,6,'',0,'',1398381058,'IBM Research [Bot]','ibm research [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','b44f65ea19eb3271',0,0,0),(21,2,6,'',0,'',1398381058,'ICCrawler - ICjobs','iccrawler - icjobs','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','4294b3094cb6839b',0,0,0),(22,2,6,'',0,'',1398381058,'ichiro [Crawler]','ichiro [crawler]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','8104fe464b7326e8',0,0,0),(23,2,6,'',0,'',1398381058,'Majestic-12 [Bot]','majestic-12 [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','5b808a6a28614949',0,0,0),(24,2,6,'',0,'',1398381058,'Metager [Bot]','metager [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','159a2a44164c6714',0,0,0),(25,2,6,'',0,'',1398381058,'MSN NewsBlogs','msn newsblogs','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','ebcb35aca982dd5f',0,0,0),(26,2,6,'',0,'',1398381058,'MSN [Bot]','msn [bot]','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','e54b00242a5f50e1',0,0,0),(27,2,6,'',0,'',1398381058,'MSNbot Media','msnbot media','',1398381058,0,'',0,'',0,1398381058,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','8e95db69c580e2e9',0,0,0),(28,2,6,'',0,'',1398381058,'Nutch [Bot]','nutch [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','2dbf2d5747190b64',0,0,0),(29,2,6,'',0,'',1398381059,'Online link [Validator]','online link [validator]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','8f32ee61ce9f4f10',0,0,0),(30,2,6,'',0,'',1398381059,'psbot [Picsearch]','psbot [picsearch]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','ba9ed3919ebf52d0',0,0,0),(31,2,6,'',0,'',1398381059,'Sensis [Crawler]','sensis [crawler]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','442978ce07f952e0',0,0,0),(32,2,6,'',0,'',1398381059,'SEO Crawler','seo crawler','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','40f96f722a8a0ab9',0,0,0),(33,2,6,'',0,'',1398381059,'Seoma [Crawler]','seoma [crawler]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','7199a8a01c3b2483',0,0,0),(34,2,6,'',0,'',1398381059,'SEOSearch [Crawler]','seosearch [crawler]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','8e2b8f39164260c5',0,0,0),(35,2,6,'',0,'',1398381059,'Snappy [Bot]','snappy [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','1f34d83e0a40e0ac',0,0,0),(36,2,6,'',0,'',1398381059,'Steeler [Crawler]','steeler [crawler]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','55d40e8dabbf89f1',0,0,0),(37,2,6,'',0,'',1398381059,'Telekom [Bot]','telekom [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','c45b380066631895',0,0,0),(38,2,6,'',0,'',1398381059,'TurnitinBot [Bot]','turnitinbot [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','f2b7fa2ea2d9902a',0,0,0),(39,2,6,'',0,'',1398381059,'Voyager [Bot]','voyager [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','ffa5ad56fe6476e0',0,0,0),(40,2,6,'',0,'',1398381059,'W3 [Sitesearch]','w3 [sitesearch]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','de81f88bec78de11',0,0,0),(41,2,6,'',0,'',1398381059,'W3C [Linkcheck]','w3c [linkcheck]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','d1833fb9ea352232',0,0,0),(42,2,6,'',0,'',1398381059,'W3C [Validator]','w3c [validator]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','9b2c0f69590c1ace',0,0,0),(43,2,6,'',0,'',1398381059,'YaCy [Bot]','yacy [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','467ec79499e00102',0,0,0),(44,2,6,'',0,'',1398381059,'Yahoo MMCrawler [Bot]','yahoo mmcrawler [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','462ca3435c29cd0a',0,0,0),(45,2,6,'',0,'',1398381059,'Yahoo Slurp [Bot]','yahoo slurp [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','39cfed7181c33479',0,0,0),(46,2,6,'',0,'',1398381059,'Yahoo [Bot]','yahoo [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','248d735e4b420dd3',0,0,0),(47,2,6,'',0,'',1398381059,'YahooSeeker [Bot]','yahooseeker [bot]','',1398381059,0,'',0,'',0,1398381059,0,'','',0,0,0,0,0,0,0,'en',0.00,0,'D M d, Y g:i a',2,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'',0,0,0,'','','','','','','','','','','','','','','6616c12672f41cc5',0,0,0);
+INSERT INTO `phpbb_users` VALUES (1,2,1,'00000000000w27wrgg\ni1cjyo000000\ni1cjyo000000',0,'',1419663576,'Anonymous','anonymous','',0,'',0,'',0,0,0,'','',0,0,0,0,0,0,0,'en','','d M Y H:i',1,0,'',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,1,1,1,0,230271,'','',0,0,'','','','','','','b991fbf6d25bf591',1,0,0),(2,3,5,'zik0zjzik0zjzik0zc\ni1cjyo000000\nzik0zjzi8sg0',0,'10.0.2.2',1419663576,'admin','admin','$2y$10$.WN2YzQeSgS1sWQlHA24u.EVALzYtgQk3pSMWIO9MDZi4KLMBZua6',0,'vagrant@local.host',427698763218,'',1419663829,0,0,'','',0,0,0,0,0,0,1,'en','','D M d, Y g:i a',1,1,'AA0000',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,1,1,1,1,230271,'','',0,0,'','','','','','','ffc883af0d4cc7cf',1,0,0),(3,2,6,'',0,'',1419663583,'AdsBot [Google]','adsbot [google]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','e6c9078934b5320e',0,0,0),(4,2,6,'',0,'',1419663583,'Alexa [Bot]','alexa [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','8babc81dc8ac5fce',0,0,0),(5,2,6,'',0,'',1419663583,'Alta Vista [Bot]','alta vista [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','582f00f91f9776a9',0,0,0),(6,2,6,'',0,'',1419663583,'Ask Jeeves [Bot]','ask jeeves [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','0c6a1c82eea5f6ba',0,0,0),(7,2,6,'',0,'',1419663583,'Baidu [Spider]','baidu [spider]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','a0d7d2bb8f0d481f',0,0,0),(8,2,6,'',0,'',1419663583,'Bing [Bot]','bing [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','13fcbbfe5edc8d9c',0,0,0),(9,2,6,'',0,'',1419663583,'Exabot [Bot]','exabot [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','8a83ffda2cd5e204',0,0,0),(10,2,6,'',0,'',1419663583,'FAST Enterprise [Crawler]','fast enterprise [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','3bb4909005b88e78',0,0,0),(11,2,6,'',0,'',1419663583,'FAST WebCrawler [Crawler]','fast webcrawler [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','859da0f5c26ced9b',0,0,0),(12,2,6,'',0,'',1419663583,'Francis [Bot]','francis [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','69a0b8c9dc1cebf2',0,0,0),(13,2,6,'',0,'',1419663583,'Gigabot [Bot]','gigabot [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','517c1c65588ce4f2',0,0,0),(14,2,6,'',0,'',1419663583,'Google Adsense [Bot]','google adsense [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','ae2f8c846e367d04',0,0,0),(15,2,6,'',0,'',1419663583,'Google Desktop','google desktop','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','731dbbef6e6dfb29',0,0,0),(16,2,6,'',0,'',1419663583,'Google Feedfetcher','google feedfetcher','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','b6c7739e579a2eec',0,0,0),(17,2,6,'',0,'',1419663583,'Google [Bot]','google [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','958ad3d906e06822',0,0,0),(18,2,6,'',0,'',1419663583,'Heise IT-Markt [Crawler]','heise it-markt [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','7acf4c853c3dddba',0,0,0),(19,2,6,'',0,'',1419663583,'Heritrix [Crawler]','heritrix [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','4cb132ab8f9a737b',0,0,0),(20,2,6,'',0,'',1419663583,'IBM Research [Bot]','ibm research [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','da0b4bff07501e9e',0,0,0),(21,2,6,'',0,'',1419663583,'ICCrawler - ICjobs','iccrawler - icjobs','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','9b6558709482d036',0,0,0),(22,2,6,'',0,'',1419663583,'ichiro [Crawler]','ichiro [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','61de5f0590e0d8e3',0,0,0),(23,2,6,'',0,'',1419663583,'Majestic-12 [Bot]','majestic-12 [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','d6ec7c14ce1d344e',0,0,0),(24,2,6,'',0,'',1419663583,'Metager [Bot]','metager [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','d46713508bbe1d35',0,0,0),(25,2,6,'',0,'',1419663583,'MSN NewsBlogs','msn newsblogs','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','3259fe69769ae71a',0,0,0),(26,2,6,'',0,'',1419663583,'MSN [Bot]','msn [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','d3fa9363339dc3bb',0,0,0),(27,2,6,'',0,'',1419663583,'MSNbot Media','msnbot media','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','763bbbd3aea45718',0,0,0),(28,2,6,'',0,'',1419663583,'Nutch [Bot]','nutch [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','b69307fd64d0fde1',0,0,0),(29,2,6,'',0,'',1419663583,'Online link [Validator]','online link [validator]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','8c3aaf8ba3985f94',0,0,0),(30,2,6,'',0,'',1419663583,'psbot [Picsearch]','psbot [picsearch]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','cb8f10f08b0da635',0,0,0),(31,2,6,'',0,'',1419663583,'Sensis [Crawler]','sensis [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','548d7018f1a7e54a',0,0,0),(32,2,6,'',0,'',1419663583,'SEO Crawler','seo crawler','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','c7b0d7c4d1fe6e3e',0,0,0),(33,2,6,'',0,'',1419663583,'Seoma [Crawler]','seoma [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','2b5bb05b5200646d',0,0,0),(34,2,6,'',0,'',1419663583,'SEOSearch [Crawler]','seosearch [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','3261c6af5351df1c',0,0,0),(35,2,6,'',0,'',1419663583,'Snappy [Bot]','snappy [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','b60d19a5766b0e8d',0,0,0),(36,2,6,'',0,'',1419663583,'Steeler [Crawler]','steeler [crawler]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','dd1ea21774ed0497',0,0,0),(37,2,6,'',0,'',1419663583,'Telekom [Bot]','telekom [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','600d395dcccd7abd',0,0,0),(38,2,6,'',0,'',1419663583,'TurnitinBot [Bot]','turnitinbot [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','103493a658dacb9e',0,0,0),(39,2,6,'',0,'',1419663583,'Voyager [Bot]','voyager [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','9589b2a66d4e5667',0,0,0),(40,2,6,'',0,'',1419663583,'W3 [Sitesearch]','w3 [sitesearch]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','e0a1776187e50b10',0,0,0),(41,2,6,'',0,'',1419663583,'W3C [Linkcheck]','w3c [linkcheck]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','12abca2aebd010f0',0,0,0),(42,2,6,'',0,'',1419663583,'W3C [Validator]','w3c [validator]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','5459c9618b2f806d',0,0,0),(43,2,6,'',0,'',1419663583,'YaCy [Bot]','yacy [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','bdec386cfffbf06d',0,0,0),(44,2,6,'',0,'',1419663583,'Yahoo MMCrawler [Bot]','yahoo mmcrawler [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','8fe173ce25d869f9',0,0,0),(45,2,6,'',0,'',1419663583,'Yahoo Slurp [Bot]','yahoo slurp [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','d51c3339ca698316',0,0,0),(46,2,6,'',0,'',1419663583,'Yahoo [Bot]','yahoo [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','6c722ae2ae3d14b9',0,0,0),(47,2,6,'',0,'',1419663583,'YahooSeeker [Bot]','yahooseeker [bot]','',1419663583,'',0,'',0,1419663583,0,'','',0,0,0,0,0,0,0,'en','UTC','D M d, Y g:i a',1,0,'9E8DA7',0,0,0,0,-3,0,0,'t','d',0,'t','a',0,1,0,0,1,1,0,230271,'','',0,0,'','','','','','','050b301c552c6f1c',0,0,0);
 /*!40000 ALTER TABLE `phpbb_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2029,4 +3025,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-01 22:45:10
+-- Dump completed on 2015-01-11 13:29:05
