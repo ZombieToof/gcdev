@@ -42,7 +42,7 @@ apache::vhost { 'GCWeb':
                   url => 'http://localhost:8000/static/'},
                  {path => '/abc/',
                   url => 'http://localhost:8000/abc/'}],
-  suphp_addhandler    => 'x-httpd-php',
+  suphp_addhandler    => 'x-httpd-suphp',
   suphp_engine        => 'on',
   suphp_configpath    => '/etc/php5/apache2',
 }
