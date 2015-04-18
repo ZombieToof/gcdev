@@ -1,16 +1,17 @@
 <?php
-// phpBB 3.0.x auto-generated configuration file
+// phpBB 3.1.x auto-generated configuration file
 // Do not change anything in this file!
-$dbms = 'mysqli';
+$dbms = 'phpbb\\db\\driver\\mysqli';
 $dbhost = 'localhost';
 $dbport = '';
 $dbname = 'phpbb';
 $dbuser = 'phpbb';
 $dbpasswd = 'phpbb';
 $table_prefix = 'phpbb_';
-$acm_type = 'file';
-$load_extensions = '';
+$phpbb_adm_relative_path = 'adm/';
+$acm_type = 'phpbb\\cache\\driver\\file';
 
 @define('PHPBB_INSTALLED', true);
+// @define('PHPBB_DISPLAY_LOAD_TIME', true);
 // @define('DEBUG', true);
-// @define('DEBUG_EXTRA', true);
+// @define('DEBUG_CONTAINER', true);

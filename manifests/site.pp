@@ -1,23 +1,25 @@
 include '::mysql::client'
 
-$phpbb_url_dir = "https://www.phpbb.com/files/release/"
-$phpbb_release = "phpBB-3.0.11"
-$phpbb_release_filename = "phpBB-3.0.11.tar.bz2"
-$phpbb_url = "http://iweb.dl.sourceforge.net/project/phpbb/phpBB%203/phpBB%203.0.11/phpBB-3.0.11.tar.bz2"
 $home_dir = "/home/vagrant"
+$phpbb_url_dir = "https://www.phpbb.com/files/release/"
+$phpbb_release = "phpBB-3.1.3"
+$phpbb_release_filename = "${phpbb_release}.tar.bz2"
+$phpbb_source_dir = "${home_dir}/${phpbb_release}"
+$phpbb_url = "https://www.phpbb.com/files/release/${phpbb_release_filename}"
+$apache_doc_root = "/var/www/html"
+$phppb_install_dir = $apache_doc_root
 
 # LAMP stack
 package {['php5',
           'php5-mysql',
           'php5-gd',
-          'libapache2-mod-suphp',
+          'libapache2-mod-php5',
           'imagemagick']:
   ensure => 'latest'
   }
 
-# suphp is tricky to configur if modphp is loaded.
-# make sure it is not installed
-package {['libapache2-mod-php5']:
+# make sure suphp is not installed (abandoned)
+package {['libapache2-mod-suphp']:
   ensure => 'absent'
   }
 
@@ -26,15 +28,15 @@ class {'apache':
   mpm_module => 'prefork'
 }
 
-class { 'apache::mod::suphp': }
-class { 'apache::mod::rewrite': }
-class { 'apache::mod::proxy': }
-class { 'apache::mod::proxy_http': }
+include 'apache::mod::php'
+include 'apache::mod::rewrite'
+include 'apache::mod::proxy'
+include 'apache::mod::proxy_http'
 
 
 apache::vhost { 'GCWeb':
   port => '80',
-  docroot => '/vagrant/src/GCWeb',
+  docroot => $apache_doc_root,
 #  rewrites => [{ rewrite_rule => []}]
   proxy_pass => [{path => '/djangoadmin/',
                   url => 'http://localhost:8000/djangoadmin/'},
@@ -42,67 +44,122 @@ apache::vhost { 'GCWeb':
                   url => 'http://localhost:8000/static/'},
                  {path => '/abc/',
                   url => 'http://localhost:8000/abc/'}],
-  suphp_addhandler    => 'x-httpd-suphp',
-  suphp_engine        => 'on',
-  suphp_configpath    => '/etc/php5/apache2',
-}
-
-
-file {'/etc/suphp/suphp.conf':
-   ensure => 'present',
-   source => '/vagrant/files/suphp.conf',
-   mode => '0411',  # mode does not work in synced folder
-   owner => 'root',
-   group => 'root',
-   notify => Service["apache2"],
 }
 
 #
-# Configure GCWeb/phpbb
+# Download and install phpbb
 #
 
-# file {'/vagrant/src/GCWeb/forum/config.php':
-#    ensure => 'present',
-#    source => '/vagrant/files/phpbb_config.php',
-#    mode => '0777',  # mode does not work in synced folder
-#    notify => Service["apache2"]
-# }
+exec {
+  "Retrieve ${phpbb_url}":
+    cwd     => "$home_dir",
+    command => "/usr/bin/wget $phpbb_url",
+    creates => "${home_dir}/${phpbb_release_filename}",
+    timeout => 3600,
+}
 
-# file {'/vagrant/src/GCWeb/library/includes/config.php':
-#    ensure => 'present',
-#    source => '/vagrant/files/library_includes_config.php',
-#    mode => '0777',  # mode does not work in synced folder
-#    notify => Service["apache2"]
-# }
 
-# # The files are located in a synced folder now. Changing permissions
-# # isn't possible from within the VM. Moved this to Vagrantfile
-# # exec {'Change phpbb $ permissions':
-# #   command => "/vagrant/files/phpbb_change_permissions.sh",
-# #   require => File["/vagrant/src/GCWeb/forum/config.php"],
-# # }
+exec {
+  "Extract ${phpbb_release_filename}":
+    cwd     => "$home_dir",
+    command => "/bin/tar xjf ${phpbb_release_filename} && mv /home/vagrant/phpBB3 /home/vagrant/${phpbb_release}",
+    creates  => "${home_dir}/${phpbb_release}",
+    require => Exec["Retrieve ${phpbb_url}"],
+}
 
-# file {'/vagrant/src/GCWeb/forum/install':
-#   ensure => 'absent',
-#   force => 'true'
-# }
+exec {
+  "Copy ${phpbb_release_filename} to ${phpbb_install_dir}":
+    cwd     => "$home_dir",
+    command => "/bin/rm -rf /var/www/html/* && cp -R ${phpbb_source_dir}/* ${phpbb_source_dir}/.htaccess ${apache_doc_root} && chown -R www-data:www-data ${apache_doc_root}",
+    creates  => "/var/www/html/config.php",
+    require => Exec["Extract ${phpbb_release_filename}"],
+}
+
+  file { "${apache_doc_root}/config.php":
+    ensure => present,
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '660',
+    source => '/vagrant/files/phpbb_config.php',
+    require => Exec[ "Copy ${phpbb_release_filename} to ${phpbb_install_dir}"];
+  }
+
+  file { "${apache_doc_root}/images/avatars/upload":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '2660',
+    require => Exec[ "Copy ${phpbb_release_filename} to ${phpbb_install_dir}"];
+  }
+
+  file { "${apache_doc_root}/files":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '2770',
+    require => Exec[ "Copy ${phpbb_release_filename} to ${phpbb_install_dir}"];
+  }
+
+  file { "${apache_doc_root}/cache":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '2770',
+    require => Exec[ "Copy ${phpbb_release_filename} to ${phpbb_install_dir}"];
+  }
+
+  file { "${apache_doc_root}/store":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '2770',
+    require => Exec[ "Copy ${phpbb_release_filename} to ${phpbb_install_dir}"];
+  }
+
+#
+# Install mysql and create the phpbb users and databases
+#
 
 class { '::mysql::server':
-  override_options => { 'mysqld' => { 'bind-address' => '0.0.0.0' } }
+  override_options => { 'mysqld' => { 'bind-address' => '0.0.0.0' } },
+  databases => {
+    'phpbb' => {
+      ensure  => 'present',
+    }
+  },
+  users => {
+    'phpbb@localhost' => {
+      ensure => 'present',
+      password_hash => mysql_password('phpbb'),
+    },
+    'phpbb@%' => {
+      ensure => 'present',
+      password_hash => mysql_password('phpbb'),
+    },
+  },
+  grants => {
+    'phpbb@%/test_phpbb.*' => {
+      privileges => ['ALL'],
+      user       => "phpbb@%",
+      table      => "test_phpbb.*",
+    },
+    'phpbb@%/phpbb.*' => {
+      privileges => ['ALL'],
+      user       => "phpbb@%",
+      table      => "phpbb.*",
+    },
+    'phpbb@localhost/test_phpbb.*' => {
+      privileges => ['ALL'],
+      user       => "phpbb@localhost",
+      table      => "test_phpbb.*",
+    },
+    'phpbb@localhost/phpbb.*' => {
+      privileges => ['ALL'],
+      user       => "phpbb@localhost",
+      table      => "phpbb.*",
+    },
+  },
 }
-
-mysql::db {'phpbb':
-  user => 'phpbb',
-  password => 'phpbb',
-  host => '%',
-  grant => ['ALL'],
-  sql => '/vagrant/files/phpbb_initial_data.sql'
-} -> mysql_grant { "phpbb@localhost/test_phpbb.*":
-    privileges => ['ALL'],
-    provider   => 'mysql',
-    user       => "phpbb@localhost",
-    table      => "test_phpbb.*",
-  }
   
 
 #

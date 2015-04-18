@@ -19,41 +19,40 @@ Requirements
 
 1. Have VirtualBox installed
 2. Have Vagrant installed
-3. Have access to KoffeinFlummi's GCWeb.
 
 
 Installation
 ============
 
 * Clone this repository.
-* Clone Koffeinflumis GCWeb repository into the ./src/GCWeb
 * Clone the gcabc_ Repository into ./src/gcabc
 * Change to the repository root and run::
 
     vagrant up
 
-  `vagrant up` will basicall do the following things:
+  `vagrant up` will do the following things:
 
   * Download a Ubuntu 14.04 vagrant image from ubuntu.com and set up a
-    VM with it
+    VM.
   * Add port forwarding from the client to the host so you can access
-    phpBB/ABC from http://localhost:10080 on the host.
+    phpBB and abc from http://localhost:10080 on the host.
   * Provision the VM with the Software above, especially:
-    * Add a MySQL database for phpBB/ABC
-    * Import the Tables/Data of a new phpBB installation
-    * Configure Apache to serve ./projects/GCWeb
+    * Add a MySQL database for phpBB/ABC.
+    * Install phpBB.
+    * Import the Tables/Data of a new phpBB installation.
+    * Configure Apache to serve phpBB and pass through django.
 
 
 Customizations
 ==============
 
 The mysql database on the client is initalized with the data from a
-newly installed phpbb 3.0.12. If you want to use different data you
-can replace the file `files/phpbb_initial_data.sql` with a mysql dump
-of your choice *before* you build the box the first time. 
+newly installed phpbb (3.1.3 at the time of writing). If you want to 
+use different data you can replace the file `files/phpbb_initial_data.sql` 
+with a mysql dump of your choice *before* you build the box the first time. 
 
 If you want to replace the data later you can replace the file 
-`phpbb_initial_data.sql` and run `./bin/phpbb_reinitialize_database.sh`.
+`phpbb_initial_data.sql` and run `./bin/db_drop_and_load_initial_phpbb3_db.sh`.
 
 
 Usernames/Passwords
@@ -61,7 +60,7 @@ Usernames/Passwords
 
 * systems user/password: vagrant
   (default of the VM image)
-* mysql db/user/password: phpbb 
+* mysql db/user/password: phpbb
   (configure in `manifests/site.pp` and used in `files/*config.php)
 * phpbb admin user/password: admin/password
   (part of ` phpbb_initial_data.sql`)
@@ -70,19 +69,18 @@ Usernames/Passwords
 Available Web services / local paths
 ====================================
 
-We configure an apache virtual host on the guest that serves GCWeb
+We configure an apache virtual host on the guest that serves phpBB
 like described in it's README, and django trough a ProxyPass rule
 for the urls /djangoadmin and /abc.
 
-* Customized phpBB (with GCWeb)
-  http://localhost:80 (guest), forwarded to
+* phpBB
+  http://localhost:80 (inside the VM), forwarded to
   http://localhost:10080 (host)
   guest path: /var/www/html
   served by apache, started: automatically
   configured by vagrant/puppet
-
-  guest path: /vagrant/projects/GCWeb
-  host path: ./projects/GCWeb
+  it probably won't work inside the guest because of the port configured
+  to 10080.
 
 * gcabc (Prototype to implement ABC in django)
   http://localhost:80/abc +
@@ -108,10 +106,8 @@ for the urls /djangoadmin and /abc.
 
   Before it is usable you have to run the migrations on the host
   which is not done automatically.
-
-  $ vagrant ssh
-  vagrant@... $ cd /vagrant/projects/gcabc
-  vagrant@... $ /home/vagrant/gcdjango/bin/python manage.py migrate
+  
+    ./bin/django_manage migrate abcapp
 
   If you don't start the django server you'll get a `bad gateway` error
   for /abc and /djangoadmin
